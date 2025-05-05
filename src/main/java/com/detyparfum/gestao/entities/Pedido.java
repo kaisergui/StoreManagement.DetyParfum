@@ -36,7 +36,7 @@ public class Pedido implements Serializable {
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
-    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItemPedido> itens = new ArrayList<>();
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
@@ -63,7 +63,10 @@ public class Pedido implements Serializable {
     public void setCliente(Cliente cliente) { this.cliente = cliente; }
     public List<ItemPedido> getItens() { return itens; }
     public List<Pagamento> getPagamentos() { return pagamentos; }
-
+    public void setItens(List<ItemPedido> itens) {
+        this.itens = itens;
+    }
+    
 	@Override
 	public int hashCode() {
 		final int prime = 31;
