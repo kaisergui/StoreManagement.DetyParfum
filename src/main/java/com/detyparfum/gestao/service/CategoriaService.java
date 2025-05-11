@@ -41,8 +41,9 @@ public class CategoriaService {
     public CategoriaDTO atualizar(Long id, CategoriaDTO dto) {
         Categoria categoria = categoriaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada com id: " + id));
-        modelMapper.map(dto, categoria);
-        return modelMapper.map(categoriaRepository.save(categoria), CategoriaDTO.class);
+        categoria.setNome(dto.getNome());
+        categoria = categoriaRepository.save(categoria);
+        return modelMapper.map(categoria, CategoriaDTO.class);
     }
 
     public void deletar(Long id) {

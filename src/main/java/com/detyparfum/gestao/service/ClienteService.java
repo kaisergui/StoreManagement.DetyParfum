@@ -45,10 +45,16 @@ public class ClienteService {
     }
 
     public ClienteDTO atualizar(Long id, ClienteDTO dto) {
-        Cliente cliente = clienteRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado com id: " + id));
-        modelMapper.map(dto, cliente);
-        return modelMapper.map(clienteRepository.save(cliente), ClienteDTO.class);
+    	  Cliente cliente = clienteRepository.findById(id)
+    	            .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado com id: " + id));
+
+    	    cliente.setNome(dto.getNome());
+    	    cliente.setCpf(dto.getCpf());
+    	    cliente.setTelefone(dto.getTelefone());
+    	    cliente.setEmail(dto.getEmail());
+
+    	    cliente = clienteRepository.save(cliente);
+    	    return modelMapper.map(cliente, ClienteDTO.class);
     }
 
     public void deletar(Long id) {

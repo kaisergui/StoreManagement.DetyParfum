@@ -55,7 +55,7 @@ public class PedidoService {
                     ItemPedido item = new ItemPedido();
                     item.setProduto(produto);
                     item.setQuantidade(itemDTO.getQuantidade());
-                    item.setPreco(itemDTO.getPreco());
+                    item.setPreco(produto.getPreco());
                     item.setPedido(pedido);
 
                     pedido.getItens().add(item);
@@ -86,7 +86,9 @@ public class PedidoService {
         Pedido pedido = pedidoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado com id: " + id));
 
-        modelMapper.map(dto, pedido);
+        pedido.setData(dto.getData());
+        pedido.setStatus(dto.getStatus());
+        pedido.setObservacao(dto.getObservacao());
         pedido.setCliente(clienteRepository.findById(dto.getClienteId())
                 .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado com id: " + dto.getClienteId())));
 
@@ -99,7 +101,7 @@ public class PedidoService {
                 ItemPedido item = new ItemPedido();
                 item.setProduto(produto);
                 item.setQuantidade(itemDTO.getQuantidade());
-                item.setPreco(itemDTO.getPreco());
+                item.setPreco(produto.getPreco());
                 item.setPedido(pedido);
 
                 pedido.getItens().add(item);

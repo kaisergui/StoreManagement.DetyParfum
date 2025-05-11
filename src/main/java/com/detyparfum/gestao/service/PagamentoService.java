@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.detyparfum.gestao.dto.PagamentoDTO;
 import com.detyparfum.gestao.entities.Pagamento;
+import com.detyparfum.gestao.entities.Pedido;
 import com.detyparfum.gestao.exception.DatabaseException;
 import com.detyparfum.gestao.exception.ResourceNotFoundException;
 import com.detyparfum.gestao.repository.PagamentoRepository;
@@ -47,10 +48,16 @@ public class PagamentoService {
     public PagamentoDTO atualizar(Long id, PagamentoDTO dto) {
         Pagamento pagamento = pagamentoRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Pagamento não encontrado com id: " + id));
-        modelMapper.map(dto, pagamento);
-        pagamento.setPedido(pedidoRepository.findById(dto.getPedidoId())
-                .orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado com id: " + dto.getPedidoId())));
-        return modelMapper.map(pagamentoRepository.save(pagamento), PagamentoDTO.class);
+        pagamento.setTipo(dto.getTipo());
+        pagamento.setParcelas(dto.getParcelas());
+        pagamento.setValor(dto.getValor());
+
+        Pedido pedido = pedidoRepository.findById(dto.getPedidoId())
+                .orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado com id: " + dto.getPedidoId()));
+        pagamento.setPedido(pedido);
+
+        pagamento = pagamentoRepository.save(pagamento);
+        return modelMapper.map(pagamento, PagamentoDTO.class);
     }
 
     public void deletar(Long id) {
