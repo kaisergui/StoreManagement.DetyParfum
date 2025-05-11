@@ -45,12 +45,16 @@ public class ProdutoService {
     }
 
     public ProdutoDTO atualizar(Long id, ProdutoDTO dto) {
-        Produto produto = produtoRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado com id: " + id));
-        modelMapper.map(dto, produto);
-        produto.setCategoria(categoriaRepository.findById(dto.getCategoriaId())
-                .orElseThrow(() -> new ResourceNotFoundException("Categoria não encontrada com id: " + dto.getCategoriaId())));
-        return modelMapper.map(produtoRepository.save(produto), ProdutoDTO.class);
+    	  Produto produto = produtoRepository.findById(id)
+                  .orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado com id: " + id));
+
+          produto.setNome(dto.getNome());
+          produto.setPreco(dto.getPreco());
+          produto.setMarca(dto.getMarca());
+          produto.setEstoque(dto.getEstoque());
+
+          produto = produtoRepository.save(produto);
+          return modelMapper.map(produto, ProdutoDTO.class);
     }
 
     public void deletar(Long id) {
