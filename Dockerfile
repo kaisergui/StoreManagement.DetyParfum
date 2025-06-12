@@ -1,24 +1,24 @@
-# Usa imagem base com Java 17
 FROM eclipse-temurin:17-jdk-alpine
 
-# Define o diretório de trabalho dentro do container
 WORKDIR /app
 
-# Copia os arquivos de configuração Maven
-COPY .mvn/ .mvn
-COPY mvnw pom.xml ./
+# Copia o wrapper e dá permissão
+COPY mvnw .
+RUN chmod +x ./mvnw
 
-# Baixa as dependências do projeto sem executar os testes
+# Copia arquivos e pastas de configuração do Maven
+COPY .mvn/ .mvn
+COPY pom.xml .
+
+# Baixa dependências sem rodar testes
 RUN ./mvnw dependency:go-offline
 
-# Copia o restante do código fonte
+# Copia o restante do código
 COPY src ./src
 
-# Compila o projeto (sem testes para acelerar)
+# Constrói a aplicação sem rodar testes
 RUN ./mvnw clean package -DskipTests
 
-# Expõe a porta padrão do Spring Boot
 EXPOSE 8080
 
-# Comando para iniciar a aplicação
 CMD ["java", "-jar", "target/gestao-0.0.1-SNAPSHOT.jar"]
