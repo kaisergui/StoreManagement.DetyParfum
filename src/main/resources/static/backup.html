@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Backup | Dety Parfum</title>
+<link href="/assets/tailwind/output.css" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body { font-family: 'Crimson Text', serif; }
+  </style>
+</head>
+<body class="bg-purple-50 text-gray-800">
+  <!-- Botão mobile -->
+  <button id="menu-toggle"
+    class="fixed top-4 left-4 z-50 md:hidden bg-purple-700 text-white px-3 py-2 rounded shadow">
+    ☰
+  </button>
+  <div class="flex min-h-screen">
+    <!-- Sidebar -->
+	<aside id="sidebar"
+	  class="w-64 bg-white shadow-xl border-r border-purple-200 flex flex-col p-4 fixed top-0 left-0 bottom-0 z-40 transform transition-transform duration-300 ease-in-out -translate-x-full md:translate-x-0">
+      <div class="flex items-center justify-center mb-6">
+        <h1 class="text-2xl font-bold text-purple-700">Dety Parfum</h1>
+      </div>
+      <div class="mb-4">
+        <input type="text" placeholder="Buscar no menu..." class="w-full px-3 py-2 border border-purple-300 rounded-md focus:ring-2 focus:ring-purple-400 outline-none" />
+      </div>
+
+      <nav class="flex-1 space-y-2">
+        <a href="/index.html" class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition text-purple-700 font-semibold">🏠 <span class="ml-2">Dashboard</span></a>
+        <a href="/clientes.html" class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition">👤 <span class="ml-2">Clientes</span></a>
+        <a href="/produto.html" class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition">📦 <span class="ml-2">Produtos</span></a>
+        <a href="/pedido.html" class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition">🧾 <span class="ml-2">Pedidos</span></a>
+        <a href="/pagamento.html" class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition">💳 <span class="ml-2">Pagamentos</span></a>
+        <a href="/relatorios.html" class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition">📊 <span class="ml-2">Relatórios</span></a>
+        <a href="/usuarios.html" class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition">🔐 <span class="ml-2">Usuários</span></a>
+        <a href="/configuracoes.html" class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition">⚙️ <span class="ml-2">Configurações</span></a>
+        <a href="/backup.html" class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition">💾 <span class="ml-2">Backup</span></a>
+        <a href="/alertas.html" class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition">⚠️ <span class="ml-2">Alertas</span></a>
+      </nav>
+
+      <div class="mt-auto pt-6 border-t border-purple-200 text-sm text-center text-purple-500">
+        Sistema de gestão exclusivo criado por Guilherme Kaiser.
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="flex-1 px-6 py-10 w-full md:ml-64 mt-16 md:mt-0 transition-all duration-300">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
+        <h1 class="text-3xl font-bold text-purple-700">Gerenciador de Backup</h1>
+        <div class="flex flex-col sm:flex-row gap-2">
+          <button id="btnCriarBackup" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded shadow flex items-center gap-2">
+            <i data-lucide="database-backup"></i> Criar Backup
+          </button>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <div class="bg-white p-6 rounded-lg shadow border border-purple-200 w-full">
+          <h2 class="text-lg font-semibold text-purple-700 mb-4">Backups disponíveis</h2>
+          <ul id="listaBackups" class="space-y-3 text-sm"></ul>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    const listaBackups = document.getElementById('listaBackups');
+    const btnCriarBackup = document.getElementById('btnCriarBackup');
+
+    // Obter token CSRF
+    async function getCsrfToken() {
+      try {
+        const res = await fetch("/csrf-token", { credentials: "same-origin" });
+        const data = await res.json();
+        return data.token;
+      } catch (e) {
+        console.error("Erro ao obter token CSRF:", e);
+        return null;
+      }
+    }
+
+    // Carregar lista de backups
+    async function carregarBackups() {
+      try {
+        const res = await fetch('/api/backup/listar');
+        const arquivos = await res.json();
+
+        if (!Array.isArray(arquivos)) throw new Error("Formato inválido recebido");
+
+        listaBackups.innerHTML = arquivos.map(nome => `
+          <li class="flex items-center justify-between bg-purple-50 p-3 rounded border border-purple-200">
+            <span class="truncate">${nome}</span>
+            <div class="flex gap-2">
+              <a href="/api/backup/download/${encodeURIComponent(nome)}" class="bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded text-xs">Baixar</a>
+              <button onclick="excluirBackup('${nome}')" class="bg-red-100 hover:bg-red-200 text-red-600 px-3 py-1 rounded text-xs">Excluir</button>
+            </div>
+          </li>
+        `).join('');
+      } catch (error) {
+        console.error("Erro ao carregar backups", error);
+        listaBackups.innerHTML = `<li class="text-red-600">Erro ao carregar backups.</li>`;
+      }
+    }
+
+    // Criar novo backup
+    async function criarBackup() {
+      btnCriarBackup.disabled = true;
+      btnCriarBackup.textContent = "Criando...";
+
+      try {
+        const token = await getCsrfToken();
+        const res = await fetch('/api/backup/criar', {
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/json",
+            "X-XSRF-TOKEN": token
+          },
+          credentials: "same-origin"
+        });
+
+        if (res.ok) {
+          alert("Backup criado com sucesso!");
+          await carregarBackups();
+        } else {
+          alert("Erro ao criar backup.");
+        }
+      } catch (e) {
+        alert("Erro na requisição.");
+        console.error(e);
+      } finally {
+        btnCriarBackup.disabled = false;
+        btnCriarBackup.innerHTML = '<i data-lucide="database-backup"></i> Criar Backup';
+        lucide.createIcons();
+      }
+    }
+
+    // Excluir backup
+    async function excluirBackup(nome) {
+      if (!confirm(`Excluir o backup "${nome}"?`)) return;
+
+      try {
+        const token = await getCsrfToken();
+        const res = await fetch(`/api/backup/${encodeURIComponent(nome)}`, {
+          method: 'DELETE',
+          headers: {
+            "X-XSRF-TOKEN": token
+          },
+          credentials: "same-origin"
+        });
+
+        if (res.ok) {
+          alert("Backup excluído.");
+          await carregarBackups();
+        } else {
+          alert("Erro ao excluir backup.");
+        }
+      } catch (e) {
+        alert("Erro ao excluir.");
+        console.error(e);
+      }
+    }
+
+    btnCriarBackup.addEventListener('click', criarBackup);
+    document.addEventListener('DOMContentLoaded', carregarBackups);
+	
+	document.addEventListener("DOMContentLoaded", () => {
+	   const sidebar = document.getElementById("sidebar");
+	   const toggleBtn = document.getElementById("menu-toggle");
+
+	   toggleBtn.addEventListener("click", () => {
+	     // Adiciona ou remove manualmente a classe de esconder no mobile
+	     if (sidebar.classList.contains("-translate-x-full")) {
+	       sidebar.classList.remove("-translate-x-full");
+	     } else {
+	       sidebar.classList.add("-translate-x-full");
+	     }
+	   });
+
+	   // Fecha a sidebar ao clicar fora dela no mobile
+	   document.addEventListener("click", function (e) {
+	     if (
+	       window.innerWidth < 768 &&
+	       !sidebar.contains(e.target) &&
+	       !toggleBtn.contains(e.target)
+	     ) {
+	       sidebar.classList.add("-translate-x-full");
+	     }
+	   });
+	 });
+  </script>
+</body>
+</html>
