@@ -9,11 +9,11 @@ import org.springframework.context.annotation.Configuration;
 public class OpenAPIConfig {
 
     @Bean
-    public OpenAPI customOpenAPI() {
+    public OpenAPI api() {
         return new OpenAPI()
             .info(new Info()
-                .title("API - Gestão de Cosméticos")
-                .version("1.0")
-                .description("Documentação da API da loja de cosméticos"));
+                .title("API Loja Dety Parfum")
+                .version("1.0.0")
+                .description("Documentação da API"));
     }
 }

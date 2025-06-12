@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.detyparfum.gestao.dto.ClienteDTO;
+import com.detyparfum.gestao.dto.ClienteDetalhesDTO;
 import com.detyparfum.gestao.service.ClienteService;
 
 
@@ -51,4 +52,11 @@ public class ClienteController {
         clienteService.deletar(id);
         return ResponseEntity.noContent().build();
     }
+    
+    @GetMapping("/{id}/detalhes")
+    public ResponseEntity<ClienteDetalhesDTO> getDetalhesCliente(@PathVariable Long id) {
+        ClienteDetalhesDTO dto = clienteService.obterDetalhesCliente(id);
+        return ResponseEntity.ok(dto);
+    }
+
 }

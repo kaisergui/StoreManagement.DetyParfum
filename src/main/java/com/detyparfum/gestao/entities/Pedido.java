@@ -63,6 +63,9 @@ public class Pedido implements Serializable {
     public void setCliente(Cliente cliente) { this.cliente = cliente; }
     public List<ItemPedido> getItens() { return itens; }
     public List<Pagamento> getPagamentos() { return pagamentos; }
+    public void setPagamentos(List<Pagamento> pagamentos) {
+        this.pagamentos = pagamentos;
+    }
     public void setItens(List<ItemPedido> itens) {
         this.itens = itens;
     }

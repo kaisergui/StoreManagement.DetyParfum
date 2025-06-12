@@ -15,19 +15,19 @@ public class PedidoDTO implements Serializable {
     private String observacao;
     private Long clienteId;
     private List<ItemPedidoDTO> itens;
+    private List<PagamentoDTO> pagamentos;
 
     public PedidoDTO() {}
 
-    public PedidoDTO(Long id, Date data, StatusPedido status, String observacao, Long clienteId, List<ItemPedidoDTO> itens) {
+    public PedidoDTO(Long id, Date data, StatusPedido status, String observacao, Long clienteId, List<ItemPedidoDTO> itens, List<PagamentoDTO> pagamentos) {
         this.id = id;
         this.data = data;
         this.status = status;
         this.observacao = observacao;
         this.clienteId = clienteId;
         this.itens = itens;
+        this.pagamentos = pagamentos;
     }
-
-    // Getters e Setters
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -46,5 +46,7 @@ public class PedidoDTO implements Serializable {
 
     public List<ItemPedidoDTO> getItens() { return itens; }
     public void setItens(List<ItemPedidoDTO> itens) { this.itens = itens; }
-    
+
+    public List<PagamentoDTO> getPagamentos() { return pagamentos; }
+    public void setPagamentos(List<PagamentoDTO> pagamentos) { this.pagamentos = pagamentos; }
 }

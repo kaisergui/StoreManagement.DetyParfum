@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 
 import com.detyparfum.gestao.dto.ItemPedidoDTO;
 import com.detyparfum.gestao.dto.PedidoDTO;
+import com.detyparfum.gestao.dto.PagamentoDTO;
 import com.detyparfum.gestao.entities.ItemPedido;
+import com.detyparfum.gestao.entities.Pagamento;
 import com.detyparfum.gestao.entities.Pedido;
 import com.detyparfum.gestao.entities.Produto;
 import com.detyparfum.gestao.entities.enums.StatusPedido;
@@ -44,24 +46,60 @@ public class PedidoService {
             pedido.setCliente(clienteRepository.findById(dto.getClienteId())
                     .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado com id: " + dto.getClienteId())));
 
-            pedido.setStatus(dto.getStatus() != null ? dto.getStatus() : StatusPedido.AGUARDANDO_PAGAMENTO);
+            pedido.setStatus(dto.getStatus() != null ? dto.getStatus() : pedido.getStatus());
             pedido.setItens(new ArrayList<>());
+            pedido.setPagamentos(new ArrayList<>()); // ← necessário para iniciar a lista de pagamentos
 
+         // Itens
             if (dto.getItens() != null) {
                 for (ItemPedidoDTO itemDTO : dto.getItens()) {
                     Produto produto = produtoRepository.findById(itemDTO.getProdutoId())
                             .orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado com id: " + itemDTO.getProdutoId()));
 
+                    boolean precisaSalvar = false;
+
+                    // Atualiza estoque somente se > 0
+                    if (produto.getEstoque() != null && produto.getEstoque() > 0) {
+                        int novoEstoque = produto.getEstoque() - itemDTO.getQuantidade();
+                        produto.setEstoque(Math.max(novoEstoque, 0));
+                        precisaSalvar = true;
+                    }
+
+                    // Atualiza preço do produto se for diferente
+                    if (itemDTO.getPreco() != null && !produto.getPreco().equals(itemDTO.getPreco())) {
+                        produto.setPreco(itemDTO.getPreco());
+                        precisaSalvar = true;
+                    }
+
+                    // Salva o produto apenas se houve alteração
+                    if (precisaSalvar) {
+                        produtoRepository.save(produto);
+                    }
+
+                    // Cria item do pedido
                     ItemPedido item = new ItemPedido();
                     item.setProduto(produto);
                     item.setQuantidade(itemDTO.getQuantidade());
-                    item.setPreco(produto.getPreco());
+                    item.setPreco(itemDTO.getPreco());
                     item.setPedido(pedido);
 
                     pedido.getItens().add(item);
                 }
             }
 
+            // Pagamentos
+            if (dto.getPagamentos() != null) {
+                for (PagamentoDTO pagamentoDTO : dto.getPagamentos()) {
+                    Pagamento pagamento = new Pagamento();
+                    pagamento.setTipo(pagamentoDTO.getTipo());
+                    pagamento.setParcelas(pagamentoDTO.getParcelas());
+                    pagamento.setValor(pagamentoDTO.getValor());
+                    pagamento.setPedido(pedido); // vínculo bidirecional
+
+                    pedido.getPagamentos().add(pagamento);
+                }
+            }
+            
             pedido = pedidoRepository.save(pedido);
             return modelMapper.map(pedido, PedidoDTO.class);
 
@@ -69,7 +107,7 @@ public class PedidoService {
             throw new DatabaseException("Erro ao salvar pedido: " + e.getMessage());
         }
     }
-
+    
     public List<PedidoDTO> listarTodos() {
         return pedidoRepository.findAll().stream()
                 .map(p -> modelMapper.map(p, PedidoDTO.class))
@@ -92,6 +130,7 @@ public class PedidoService {
         pedido.setCliente(clienteRepository.findById(dto.getClienteId())
                 .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado com id: " + dto.getClienteId())));
 
+        // Atualiza itens
         pedido.getItens().clear();
         if (dto.getItens() != null) {
             for (ItemPedidoDTO itemDTO : dto.getItens()) {
@@ -101,10 +140,24 @@ public class PedidoService {
                 ItemPedido item = new ItemPedido();
                 item.setProduto(produto);
                 item.setQuantidade(itemDTO.getQuantidade());
-                item.setPreco(produto.getPreco());
+                item.setPreco(itemDTO.getPreco());
                 item.setPedido(pedido);
 
                 pedido.getItens().add(item);
+            }
+        }
+
+        // Atualiza pagamentos
+        pedido.getPagamentos().clear(); // Remove todos os antigos
+        if (dto.getPagamentos() != null) {
+            for (PagamentoDTO pagamentoDTO : dto.getPagamentos()) {
+                Pagamento pagamento = new Pagamento();
+                pagamento.setTipo(pagamentoDTO.getTipo());
+                pagamento.setParcelas(pagamentoDTO.getParcelas());
+                pagamento.setValor(pagamentoDTO.getValor());
+                pagamento.setPedido(pedido);
+
+                pedido.getPagamentos().add(pagamento);
             }
         }
 
