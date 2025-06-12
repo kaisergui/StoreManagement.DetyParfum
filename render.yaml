@@ -1,0 +1,11 @@
+# render.yaml
+services:
+  - type: web
+    name: dety-parfum-app
+    env: java
+    plan: free
+    buildCommand: ./mvnw clean install
+    startCommand: java -jar target/*.jar
+    branch: main
+    region: oregon
+    repo: https://github.com/kaisergui/StoreManagement.DetyParfum
