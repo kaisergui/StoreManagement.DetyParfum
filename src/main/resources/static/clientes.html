@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clientes | Dety Parfum</title>
+ <link href="/assets/tailwind/output.css" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+  <style>
+    body {
+      font-family: 'Crimson Text', serif;
+    }
+    .modal {
+      transition: all 0.3s ease-in-out;
+    }
+  </style>
+</head>
+
+<body class="bg-purple-50 text-gray-800">
+  <!-- Botão mobile -->
+  <button id="menu-toggle" class="fixed top-4 left-4 z-50 md:hidden bg-purple-700 text-white px-3 py-2 rounded shadow">
+    ☰
+  </button>
+
+  <div class="flex min-h-screen">
+    <!-- Sidebar -->
+
+	<aside id="sidebar" class="w-64 bg-white shadow-xl border-r border-purple-200 flex flex-col p-4 fixed top-0 left-0 bottom-0 z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
+		  <div class="flex items-center justify-center mb-6">
+		    <h1 class="text-2xl font-bold text-purple-700">Dety Parfum</h1>
+		  </div>
+		  <div class="mb-4">
+		    <input type="text" placeholder="Buscar no menu..." class="w-full px-3 py-2 border border-purple-300 rounded-md focus:ring-2 focus:ring-purple-400 outline-none" />
+		  </div>
+
+		  <nav class="flex-1 space-y-2">
+		    <a href="/index.html" class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition text-purple-700 font-semibold">
+		      🏠 <span class="ml-2">Dashboard</span>
+		    </a>
+		    <a href="/clientes.html" class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition">👤 <span class="ml-3">Clientes</span></a>
+		    <a href="/produto.html" class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition">📦 <span class="ml-2">Produtos</span></a>
+		    <a href="/pedido.html" class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition">🧾 <span class="ml-2">Pedidos</span></a>
+		    <a href="/pagamento.html" class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition">💳 <span class="ml-2">Pagamentos</span></a>
+		    <a href="/relatorios.html" class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition">📊 <span class="ml-2">Relatórios</span></a>
+		    <a href="/usuarios.html" class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition">🔐 <span class="ml-2">Usuários</span></a>
+		    <a href="/configuracoes.html" class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition">⚙️ <span class="ml-2">Configurações</span></a>
+		    <a href="/backup.html" class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition">💾 <span class="ml-2">Backup</span></a>
+		    <a href="/alertas.html" class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition">⚠️ <span class="ml-2">Alertas</span></a>
+		  </nav>
+
+		  <div class="mt-auto pt-6 border-t border-purple-200 text-sm text-center text-purple-500">
+		    Sistema de gestão exclusivo criado por Guilherme Kaiser.
+		  </div>
+		</aside>
+
+  <!-- Main -->
+ <main class="flex-1 px-6 py-10 w-full md:ml-64 mt-16 md:mt-0 transition-all duration-300">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
+      <h1 class="text-3xl font-bold text-purple-700">Clientes</h1>
+      <div class="flex flex-col sm:flex-row gap-2">
+        <input id="filtro" type="text" placeholder="Buscar por nome, CPF ou e-mail" class="px-3 py-2 border border-purple-300 rounded-md focus:ring-2 focus:ring-purple-500 w-full sm:w-64" />
+        <button onclick="exportarCSV()" class="bg-purple-100 px-4 py-2 rounded-md text-purple-700 border border-purple-200 hover:bg-purple-200">Exportar CSV</button>
+        <button id="btnOpenModal" class="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg shadow-md">
+          <i data-lucide="plus"></i> Novo Cliente
+        </button>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="min-w-full table-auto bg-white rounded shadow overflow-hidden">
+        <thead class="bg-purple-100">
+          <tr>
+            <th class="text-left p-3">Nome</th>
+            <th class="text-left p-3">E-mail</th>
+            <th class="text-left p-3">CPF</th>
+            <th class="text-left p-3">Telefone</th>
+            <th class="text-left p-3">Ações</th>
+          </tr>
+        </thead>
+        <tbody id="clientesTable" class="divide-y"></tbody>
+      </table>
+    </div>
+
+	<div class="mt-4 flex justify-between items-center">
+	   <button id="btnAnterior" class="px-4 py-2 bg-purple-200 text-purple-800 rounded disabled:opacity-50">⬅ Anterior</button>
+	   <span class="text-purple-700 font-semibold">Página <span id="numeroPagina">1</span></span>
+	   <button id="btnProxima" class="px-4 py-2 bg-purple-200 text-purple-800 rounded disabled:opacity-50">Próxima ➡</button>
+	 </div>
+
+    <!-- Modal -->
+    <div id="modal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
+      <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6 modal scale-95 opacity-0">
+        <h2 class="text-xl font-bold text-purple-700 mb-4">Cadastrar Cliente</h2>
+        <form id="clienteForm" class="space-y-4">
+          <input type="hidden" id="clienteId" />
+          <div>
+            <label class="block text-sm font-medium mb-1">Nome</label>
+            <input id="nome" type="text" pattern="^[\p{L}\s]+$"  required class="w-full border border-purple-300 rounded px-3 py-2 focus:ring-2 focus:ring-purple-500" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">E-mail</label>
+            <input id="email" type="email" required class="w-full border border-purple-300 rounded px-3 py-2 focus:ring-2 focus:ring-purple-500" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">CPF</label>
+            <input id="cpf" type="text" pattern="\d{3}\.\d{3}\.\d{3}-\d{2}"  placeholder="000.000.000-00" required class="w-full border border-purple-300 rounded px-3 py-2 focus:ring-2 focus:ring-purple-500" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1">Telefone</label>
+            <input id="telefone" type="tel" pattern="\(\d{2}\) \d{5}-\d{4}" placeholder="(00) 00000-0000" required class="w-full border border-purple-300 rounded px-3 py-2 focus:ring-2 focus:ring-purple-500" />
+          </div>
+          <div class="flex justify-end gap-2">
+            <button type="button" id="btnCloseModal" class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400">Cancelar</button>
+            <button type="submit" class="px-4 py-2 rounded bg-purple-600 text-white hover:bg-purple-700">Salvar</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+  
+
+
+  <script>
+    lucide.createIcons();
+
+    const apiUrl = "/clientes";
+    const tableBody = document.getElementById("clientesTable");
+    const modal = document.getElementById("modal");
+    const form = document.getElementById("clienteForm");
+    const btnOpenModal = document.getElementById("btnOpenModal");
+    const btnCloseModal = document.getElementById("btnCloseModal");
+    const filtroInput = document.getElementById("filtro");
+
+    const nome = document.getElementById("nome");
+    const email = document.getElementById("email");
+    const cpf = document.getElementById("cpf");
+    const telefone = document.getElementById("telefone");
+    const clienteId = document.getElementById("clienteId");
+
+    let clientes = [];
+    let paginaAtual = 0;
+    const tamanhoPagina = 15;
+
+	
+	
+	
+	 
+    const openModal = () => {
+      modal.classList.remove("hidden");
+      setTimeout(() => modal.querySelector(".modal").classList.add("scale-100", "opacity-100"), 10);
+    };
+
+    const closeModal = () => {
+      modal.querySelector(".modal").classList.remove("scale-100", "opacity-100");
+      setTimeout(() => {
+        modal.classList.add("hidden");
+        form.reset();
+        clienteId.value = "";
+      }, 200);
+    };
+
+    btnOpenModal.addEventListener("click", openModal);
+    btnCloseModal.addEventListener("click", closeModal);
+
+    async function getCsrfToken() {
+      const res = await fetch("/csrf-token", { credentials: "same-origin" });
+      const data = await res.json();
+      return data.token;
+    }
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const token = await getCsrfToken();
+      const cliente = { nome: nome.value, email: email.value, cpf: cpf.value, telefone: telefone.value };
+      const id = clienteId.value;
+
+      await fetch(id ? `${apiUrl}/${id}` : apiUrl, {
+        method: id ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json", "X-XSRF-TOKEN": token },
+        credentials: "same-origin",
+        body: JSON.stringify(cliente),
+      });
+      alert("Cliente salvo com sucesso!");
+      closeModal();
+      loadClientes();
+    });
+
+    async function loadClientes() {
+      const res = await fetch(apiUrl);
+      clientes = await res.json();
+      renderTabela();
+    }
+
+    function renderTabela() {
+      const termo = filtroInput.value.toLowerCase();
+      const filtrados = clientes.filter(c => c.nome.toLowerCase().includes(termo) || c.cpf.includes(termo) || c.email.toLowerCase().includes(termo));
+      const inicio = paginaAtual * tamanhoPagina;
+      const paginados = filtrados.slice(inicio, inicio + tamanhoPagina);
+      tableBody.innerHTML = paginados.map(c => `
+        <tr>
+          <td class="p-3">${c.nome}</td>
+          <td class="p-3">${c.email}</td>
+          <td class="p-3">${c.cpf}</td>
+          <td class="p-3">${c.telefone}</td>
+          <td class="p-3 flex gap-3">
+            <a href="https://wa.me/55${c.telefone.replace(/\D/g, '')}" target="_blank" title="WhatsApp"><i data-lucide="message-circle"></i></a>
+            <button onclick='editarCliente(${JSON.stringify(c)})' title="Editar"><i data-lucide="pencil"></i></button>
+            <button onclick='excluirCliente(${c.id})' title="Excluir"><i data-lucide="trash"></i></button>
+			<button onclick="verDetalhes(${c.id})" title="Ver Detalhes">
+			  <i data-lucide='eye'></i>
+			</button>
+          </td>
+        </tr>`).join("");
+		
+		btnAnterior.disabled = paginaAtual === 0;
+			  btnProxima.disabled = (paginaAtual + 1) * tamanhoPagina >= filtrados.length;
+			  numeroPagina.textContent = paginaAtual + 1;
+      lucide.createIcons();
+    }
+	
+	btnAnterior.onclick = () => {
+		  if (paginaAtual > 0) {
+		    paginaAtual--;
+		    renderTabela();
+		  }
+		};
+		
+		btnProxima.onclick = () => {
+			  paginaAtual++;
+			  renderTabela();
+			};
+	
+	function verDetalhes(id) {
+	  window.location.href = `/detalhes_clientes.html?id=${id}`;
+	}
+	
+    function editarCliente(c) {
+      clienteId.value = c.id;
+      nome.value = c.nome;
+      email.value = c.email;
+      cpf.value = c.cpf;
+      telefone.value = c.telefone;
+      openModal();
+    }
+
+    async function excluirCliente(id) {
+      if (confirm("Deseja realmente excluir este cliente?")) {
+        const token = await getCsrfToken();
+        await fetch(`${apiUrl}/${id}`, { method: "DELETE", headers: { "X-XSRF-TOKEN": token }, credentials: "same-origin" });
+        alert("Cliente excluído com sucesso!");
+        loadClientes();
+      }
+    }
+
+   
+    function exportarCSV() {
+      const csv = Papa.unparse(clientes);
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      saveAs(blob, "clientes.csv");
+    }
+
+    filtroInput.addEventListener("input", renderTabela);
+
+    loadClientes();
+	
+	// Sidebar toggle
+		      document.getElementById('menu-toggle').addEventListener('click', () => {
+		        document.getElementById('sidebar').classList.toggle('-translate-x-full');
+		      });
+  </script>
+</body>
+
+</html>
