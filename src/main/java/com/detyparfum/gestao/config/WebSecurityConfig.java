@@ -36,7 +36,7 @@ public class WebSecurityConfig {
                 .ignoringRequestMatchers(new AntPathRequestMatcher("/login", "POST"))
             )
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login.html", "/login", "/css/**", "/js/**", "/images/**").permitAll()
+            	.requestMatchers("/login.html", "/login", "/css/**", "/js/**", "/images/**", "/assets/**").permitAll()
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
@@ -64,7 +64,7 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public AuthenticationSuccessHandler customLoginSuccessHandler(JavaMailSender mailSender) {
-        return new CustomLoginSuccessHandler(mailSender);
+    public AuthenticationSuccessHandler customLoginSuccessHandler() {
+        return new CustomLoginSuccessHandler();
     }
 }
