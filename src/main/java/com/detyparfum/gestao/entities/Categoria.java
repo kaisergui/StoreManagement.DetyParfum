@@ -29,8 +29,9 @@ public class Categoria implements Serializable {
         this.nome = nome;
     }
     public Categoria(String nome) {
-        this.nome = nome;
-    }
+    	        this.nome = nome;
+    	   }
+
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }

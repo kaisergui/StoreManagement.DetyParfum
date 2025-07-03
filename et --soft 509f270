@@ -1,0 +1,45 @@
+[33m7ff6f3b[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m HEAD@{0}: reset: moving to HEAD~1
+[33m509f270[m HEAD@{1}: reset: moving to HEAD~1
+[33mb079561[m HEAD@{2}: commit: prov
+[33m509f270[m HEAD@{3}: commit: add categorias
+[33m7ff6f3b[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m HEAD@{4}: reset: moving to HEAD~4
+[33mcac6380[m HEAD@{5}: commit: add
+[33m8c39e2d[m HEAD@{6}: commit: libera a rota para o postman
+[33mb9a92be[m HEAD@{7}: commit: admin
+[33md82daf0[m HEAD@{8}: commit: admin
+[33m7ff6f3b[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m HEAD@{9}: commit: fix: adiciona permissão para mvnw
+[33mf623868[m HEAD@{10}: commit: chore: adiciona Dockerfile para deploy no Render
+[33m82bb653[m HEAD@{11}: commit: fix: credenciais do db ajustadas para variaveis de ambiente
+[33mfce8732[m HEAD@{12}: commit: fix(security): liberado acesso à pasta /assets/** para permitir carregamento do Tailwind na página de login
+[33m5aa79c6[m HEAD@{13}: commit: feat: adiciona render.yaml para deploy
+[33mcc02479[m HEAD@{14}: commit (amend): chore: ajustes gerais e melhorias no código
+[33m6b36df2[m HEAD@{15}: commit (amend): chore: ajustes gerais e melhorias no código
+[33mb47e9ce[m HEAD@{16}: commit (amend): chore: ajustes gerais e melhorias no código
+[33m1967fa6[m HEAD@{17}: commit (amend): chore: ajustes gerais e melhorias no código
+[33md5369f6[m HEAD@{18}: commit (amend): chore: ajustes gerais e melhorias no código
+[33md07a27b[m HEAD@{19}: commit: chore: ajustes gerais e melhorias no código
+[33m82e53a0[m HEAD@{20}: commit: feat: serviço de backup com suporte a pg_dump no Windows
+[33m7ca4160[m HEAD@{21}: commit: feat: controller de dashboard com endpoints de KPIs e gráficos
+[33madbe050[m HEAD@{22}: commit: feat: sistema de backup com criação, listagem, exclusão e CSRF habilitado
+[33m4a80cce[m HEAD@{23}: commit: feat: detalhes do cliente com pedidos e produtos relacionados
+[33m3b74e8a[m HEAD@{24}: commit: feat: pedidos com itens, pagamentos, paginação e controle de estoque
+[33me040757[m HEAD@{25}: commit: feat: tela de produtos com cadastro, edição, estoque e exportação CSV
+[33mfa91165[m HEAD@{26}: commit: feat: tela de clientes com CRUD e busca
+[33mb389d32[m HEAD@{27}: commit: feat: dashboard com KPIs e gráficos interativos
+[33m3354ce7[m HEAD@{28}: commit: feat: tela de login com Tailwind responsiva
+[33m3871008[m HEAD@{29}: commit: build: configuração do Tailwind com PostCSS e output CSS automatizado
+[33m4ae8842[m HEAD@{30}: commit: feat: criar controllers para Cliente, Produto, Pedido, Categoria e Pagamento
+[33me53662b[m HEAD@{31}: commit: refactor: aplicar mapeamento manual nos métodos atualizar para evitar sobrescrita de ID
+[33mdc3a1e4[m HEAD@{32}: commit: fix: corrigir campo estoque não mapeado no ProdutoDTO
+[33m9883236[m HEAD@{33}: commit: feat: implementa tratamento para exceções
+[33m7c73968[m HEAD@{34}: commit: refactor: adapta entidades e DTOs para fluxo de serviço
+[33m9e360fc[m HEAD@{35}: commit: feat: implementa camada de serviço com lógica de negócio e integração com DTOs
+[33m0b1f9a7[m HEAD@{36}: Branch: renamed refs/heads/main to refs/heads/main
+[33m0b1f9a7[m HEAD@{38}: Branch: renamed refs/heads/main to refs/heads/main
+[33m0b1f9a7[m HEAD@{40}: Branch: renamed refs/heads/master to refs/heads/main
+[33m0b1f9a7[m HEAD@{42}: commit: feat: adiciona repositórios Spring Data JPA
+[33m8bcc508[m HEAD@{43}: commit: chore: adiciona configuração do ModelMapper e Swagger
+[33mb9645ad[m HEAD@{44}: commit: feat: adiciona DTOs para transporte de dados das entidades
+[33m21a1b2b[m HEAD@{45}: commit: feat: adiciona entidades JPA com relacionamentos e serialização
+[33m22dc5c2[m HEAD@{46}: commit: chore: configura propriedades do projeto (datasource, JPA, etc.)
+[33m227aa3e[m HEAD@{47}: commit (initial): chore: configura dependências do projeto no pom.xml

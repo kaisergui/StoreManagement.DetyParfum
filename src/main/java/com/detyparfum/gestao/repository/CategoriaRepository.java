@@ -7,5 +7,5 @@ import com.detyparfum.gestao.entities.Categoria;
 
 @Repository
 public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
-	   boolean existsByNomeIgnoreCase(String nome);
+	boolean existsByNomeIgnoreCase(String nome);
 }
