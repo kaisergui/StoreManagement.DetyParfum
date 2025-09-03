@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.detyparfum.gestao.dto.ProdutoDTO;
@@ -34,6 +35,11 @@ public class ProdutoController {
         return ResponseEntity.ok(produtoService.listarTodos());
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<List<ProdutoDTO>> buscarPorNome(@RequestParam String nome) {
+        return ResponseEntity.ok(produtoService.buscarPorNome(nome));
+    }
+    
     @PutMapping("/{id}")
     public ResponseEntity<ProdutoDTO> atualizar(@PathVariable Long id, @RequestBody ProdutoDTO dto) {
         return ResponseEntity.ok(produtoService.atualizar(id, dto));

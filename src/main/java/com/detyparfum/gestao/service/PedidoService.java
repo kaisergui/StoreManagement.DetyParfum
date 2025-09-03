@@ -20,6 +20,7 @@ import com.detyparfum.gestao.entities.enums.StatusPedido;
 import com.detyparfum.gestao.exception.DatabaseException;
 import com.detyparfum.gestao.exception.ResourceNotFoundException;
 import com.detyparfum.gestao.repository.ClienteRepository;
+import com.detyparfum.gestao.repository.ItemPedidoRepository;
 import com.detyparfum.gestao.repository.PedidoRepository;
 import com.detyparfum.gestao.repository.ProdutoRepository;
 
@@ -37,6 +38,9 @@ public class PedidoService {
 
     @Autowired
     private ModelMapper modelMapper;
+    
+    @Autowired
+    private ItemPedidoRepository itemPedidoRepository;
 
     public PedidoDTO salvar(PedidoDTO dto) {
         try {
@@ -101,6 +105,9 @@ public class PedidoService {
             }
             
             pedido = pedidoRepository.save(pedido);
+            
+           
+            
             return modelMapper.map(pedido, PedidoDTO.class);
 
         } catch (Exception e) {
@@ -173,5 +180,27 @@ public class PedidoService {
         } catch (DataIntegrityViolationException e) {
             throw new DatabaseException("Erro ao deletar pedido: dados relacionados impedem a exclusão.");
         }
+    }
+
+    public void removerItem(Long pedidoId, Long itemId) {
+        Pedido pedido = pedidoRepository.findById(pedidoId)
+                .orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado com id: " + pedidoId));
+
+        ItemPedido item = itemPedidoRepository.findById(itemId)
+                .orElseThrow(() -> new ResourceNotFoundException("Item não encontrado com id: " + itemId));
+
+        if (!item.getPedido().getId().equals(pedidoId)) {
+            throw new DatabaseException("Item não pertence ao pedido informado.");
+        }
+
+        Produto produto = item.getProduto();
+        if (produto.getEstoque() != null) {
+            produto.setEstoque(produto.getEstoque() + item.getQuantidade());
+            produtoRepository.save(produto);
+        }
+
+        pedido.getItens().remove(item);
+        itemPedidoRepository.delete(item);
+        pedidoRepository.save(pedido);
     }
 }

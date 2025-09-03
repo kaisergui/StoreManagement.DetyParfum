@@ -49,4 +49,12 @@ public class PedidoController {
         pedidoService.deletar(id);
         return ResponseEntity.noContent().build();
     }
+    
+    @DeleteMapping("/{pedidoId}/itens/{itemId}")
+    public ResponseEntity<Void> removerItem(@PathVariable Long pedidoId, @PathVariable Long itemId) {
+        pedidoService.removerItem(pedidoId, itemId);
+        return ResponseEntity.noContent().build();
+    }
+    
+    
 }

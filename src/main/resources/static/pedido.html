@@ -1,241 +1,322 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pedidos | Dety Parfum</title>
- <link href="/assets/tailwind/output.css" rel="stylesheet" />
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <style>
-    body { font-family: 'Crimson Text', serif; }
-    .modal { transition: all 0.3s ease-in-out; }
-  </style>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Pedidos | Dety Parfum</title>
+	<link href="/assets/tailwind/output.css" rel="stylesheet" />
+	<script src="https://unpkg.com/lucide@latest"></script>
+	<style>
+		body {
+			font-family: 'Crimson Text', serif;
+		}
+
+		.modal {
+			transition: all 0.3s ease-in-out;
+		}
+	</style>
 </head>
+
 <body class="bg-purple-50 text-gray-800">
-  <!-- Botão mobile -->
-  <button id="menu-toggle" class="fixed top-4 left-4 z-50 md:hidden bg-purple-700 text-white px-3 py-2 rounded shadow">
-    ☰
-  </button>
+	<!-- Botão mobile -->
+	<button id="menu-toggle"
+		class="fixed top-4 left-4 z-50 md:hidden bg-purple-700 text-white px-3 py-2 rounded shadow">
+		☰
+	</button>
 
-  <div class="flex min-h-screen">
-    <!-- Sidebar -->
+	<div class="flex min-h-screen">
+		<!-- Sidebar -->
 
-	<aside id="sidebar" class="w-64 bg-white shadow-xl border-r border-purple-200 flex flex-col p-4 fixed top-0 left-0 bottom-0 z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
-	  <div class="flex items-center justify-center mb-6">
-	    <h1 class="text-2xl font-bold text-purple-700">Dety Parfum</h1>
-	  </div>
-	  <div class="mb-4">
-	    <input type="text" placeholder="Buscar no menu..." class="w-full px-3 py-2 border border-purple-300 rounded-md focus:ring-2 focus:ring-purple-400 outline-none" />
-	  </div>
+		<aside id="sidebar"
+			class="w-64 bg-white shadow-xl border-r border-purple-200 flex flex-col p-4 fixed top-0 left-0 bottom-0 z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
+			<div class="flex items-center justify-center mb-6">
+				<h1 class="text-2xl font-bold text-purple-700">Dety Parfum</h1>
+			</div>
+			<div class="mb-4">
+				<input type="text" placeholder="Buscar no menu..."
+					class="w-full px-3 py-2 border border-purple-300 rounded-md focus:ring-2 focus:ring-purple-400 outline-none" />
+			</div>
 
-	  <nav class="flex-1 space-y-2">
-	    <a href="/index.html" class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition text-purple-700 font-semibold">
-	      🏠 <span class="ml-2">Dashboard</span>
-	    </a>
-	    <a href="/clientes.html" class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition">👤 <span class="ml-2">Clientes</span></a>
-	    <a href="/produto.html" class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition">📦 <span class="ml-2">Produtos</span></a>
-	    <a href="/pedido.html" class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition">🧾 <span class="ml-3">Pedidos</span></a>
-	    <a href="/pagamento.html" class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition">💳 <span class="ml-2">Pagamentos</span></a>
-	    <a href="/relatorios.html" class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition">📊 <span class="ml-2">Relatórios</span></a>
-	    <a href="/usuarios.html" class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition">🔐 <span class="ml-2">Usuários</span></a>
-	    <a href="/configuracoes.html" class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition">⚙️ <span class="ml-2">Configurações</span></a>
-	    <a href="/backup.html" class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition">💾 <span class="ml-2">Backup</span></a>
-	    <a href="/alertas.html" class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition">⚠️ <span class="ml-2">Alertas</span></a>
-	  </nav>
+			<nav class="flex-1 space-y-2">
+				<a href="/index.html"
+					class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition text-purple-700 font-semibold">
+					🏠 <span class="ml-2">Dashboard</span>
+				</a>
+				<a href="/clientes.html"
+					class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition">👤 <span
+						class="ml-2">Clientes</span></a>
+				<a href="/produto.html" class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition">📦
+					<span class="ml-2">Produtos</span></a>
+				<a href="/pedido.html" class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition">🧾
+					<span class="ml-3">Pedidos</span></a>
+				<a href="/pagamento.html"
+					class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition">💳 <span
+						class="ml-2">Pagamentos</span></a>
+				<a href="/relatorios.html"
+					class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition">📊 <span
+						class="ml-2">Relatórios</span></a>
+				<a href="/usuarios.html"
+					class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition">🔐 <span
+						class="ml-2">Usuários</span></a>
+				<a href="/configuracoes.html"
+					class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition">⚙️ <span
+						class="ml-2">Configurações</span></a>
+				<a href="/backup.html" class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition">💾
+					<span class="ml-2">Backup</span></a>
+				<a href="/alertas.html" class="flex items-center px-4 py-2 rounded-lg hover:bg-purple-100 transition">⚠️
+					<span class="ml-2">Alertas</span></a>
+			</nav>
 
-	  <div class="mt-auto pt-6 border-t border-purple-200 text-sm text-center text-purple-500">
-	    Sistema de gestão exclusivo criado por Guilherme Kaiser.
-	  </div>
-	</aside>
+			<div class="mt-auto pt-6 border-t border-purple-200 text-sm text-center text-purple-500">
+				Sistema de gestão exclusivo criado por Guilherme Kaiser.
+			</div>
+		</aside>
 
-	<main class="flex-1 px-6 py-10 w-full md:ml-64 mt-16 md:mt-0 transition-all duration-300">
-	    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
-      <h1 class="text-3xl font-bold text-purple-700">Pedidos</h1>
-	  <div class="flex flex-col sm:flex-row gap-2">
-		<input id="barraBusca" type="text" placeholder="Buscar por cliente, status ou data..." 
-		         class="px-3 py-2 border border-purple-300 rounded-md focus:ring-2 focus:ring-purple-500 w-full sm:w-64" />
-      <button id="btnOpenModal" class="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg shadow-md">
-        <i data-lucide="plus"></i> Novo Pedido
-      </button>
-	 </div>
-    </div>
+		<main class="flex-1 px-6 py-10 w-full md:ml-64 mt-16 md:mt-0 transition-all duration-300">
+			<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
+				<h1 class="text-3xl font-bold text-purple-700">Pedidos</h1>
+				<div class="flex flex-col sm:flex-row gap-2">
+					<input id="barraBusca" type="text" placeholder="Buscar por cliente, status ou data..."
+						class="px-3 py-2 border border-purple-300 rounded-md focus:ring-2 focus:ring-purple-500 w-full sm:w-64" />
+					<button id="btnOpenModal"
+						class="flex items-center gap-2 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg shadow-md">
+						<i data-lucide="plus"></i> Novo Pedido
+					</button>
+				</div>
+			</div>
 
-	
 
-    <div class="overflow-x-auto">
-      <table class="min-w-full table-auto bg-white rounded shadow">
-        <thead class="bg-purple-100">
-          <tr>
-            <th class="text-left p-3">Cliente</th>
-            <th class="text-left p-3">Data</th>
-            <th class="text-left p-3">Status</th>
-            <th class="text-left p-3">Itens</th>
-            <th class="text-left p-3">Pagamentos</th>
-            <th class="text-left p-3">Observação</th>
-            <th class="text-left p-3">Ações</th>
-          </tr>
-        </thead>
-        <tbody id="pedidosTable" class="divide-y"></tbody>
-      </table>
-    </div>
 
-    <div class="mt-4 flex justify-between items-center">
-      <button id="btnAnterior" class="px-4 py-2 bg-purple-200 text-purple-800 rounded disabled:opacity-50">⬅ Anterior</button>
-      <span class="text-purple-700 font-semibold">Página <span id="numeroPagina">1</span></span>
-      <button id="btnProxima" class="px-4 py-2 bg-purple-200 text-purple-800 rounded disabled:opacity-50">Próxima ➡</button>
-    </div>
+			<div class="overflow-x-auto">
+				<table class="min-w-full table-auto bg-white rounded shadow">
+					<thead class="bg-purple-100">
+						<tr>
+							<th class="text-left p-3">Cliente</th>
+							<th class="text-left p-3">Data</th>
+							<th class="text-left p-3">Status</th>
+							<th class="text-left p-3">Itens</th>
+							<th class="text-left p-3">Pagamentos</th>
+							<th class="text-left p-3">Observação</th>
+							<th class="text-left p-3">Ações</th>
+						</tr>
+					</thead>
+					<tbody id="pedidosTable" class="divide-y"></tbody>
+				</table>
+			</div>
 
-    <div id="modal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
-      <div class="bg-white rounded-lg shadow-lg w-full max-w-2xl p-6 modal scale-95 opacity-0 overflow-y-auto max-h-[90vh]">
-        <h2 class="text-xl font-bold text-purple-700 mb-4">Cadastrar Pedido</h2>
-        <form id="pedidoForm" class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium mb-1">Cliente</label>
-            <select id="clienteId" required class="w-full border border-purple-300 rounded px-3 py-2"></select>
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-1">Status</label>
-            <select id="status" required class="w-full border border-purple-300 rounded px-3 py-2 focus:ring-2 focus:ring-purple-500">
-              <option value="Aguardando Pagamento">Aguardando Pagamento</option>
-              <option value="Pago">Pago</option>
-              <option value="Cancelado">Cancelado</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-1">Itens do Pedido</label>
-            <div id="itensContainer"></div>
-            <button type="button" id="addItem" class="mt-2 text-purple-600 hover:underline">+ Adicionar Item</button>
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-1">Pagamentos</label>
-            <div id="pagamentosContainer"></div>
-            <button type="button" id="addPagamento" class="mt-2 text-purple-600 hover:underline">+ Adicionar Pagamento</button>
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-1">Observação</label>
-            <textarea id="observacao" class="w-full border border-purple-300 rounded px-3 py-2"></textarea>
-          </div>
-          <div class="flex justify-end gap-2">
-            <button type="button" id="btnCloseModal" class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400">Cancelar</button>
-            <button type="submit" class="px-4 py-2 rounded bg-purple-600 text-white hover:bg-purple-700">Salvar</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </main><tbody id="pedidosTable" class="divide-y"></tbody>
-      </table>
-    </div>
+			<div class="mt-4 flex justify-between items-center">
+				<button id="btnAnterior" class="px-4 py-2 bg-purple-200 text-purple-800 rounded disabled:opacity-50">⬅
+					Anterior</button>
+				<span class="text-purple-700 font-semibold">Página <span id="numeroPagina">1</span></span>
+				<button id="btnProxima"
+					class="px-4 py-2 bg-purple-200 text-purple-800 rounded disabled:opacity-50">Próxima ➡</button>
+			</div>
 
-    <!-- Modal -->
-    <div id="modal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
-      <div class="bg-white rounded-lg shadow-lg w-full max-w-2xl p-6 modal scale-95 opacity-0 overflow-y-auto max-h-[90vh]">
-        <h2 class="text-xl font-bold text-purple-700 mb-4">Cadastrar Pedido</h2>
-        <form id="pedidoForm" class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium mb-1">Cliente</label>
-            <select id="clienteId" required class="w-full border border-purple-300 rounded px-3 py-2"></select>
-          </div>
-		  <div>
-		    <label class="block text-sm font-medium mb-1">Status</label>
-		    <select id="status" required class="w-full border border-purple-300 rounded px-3 py-2 focus:ring-2 focus:ring-purple-500">
-		      <option value="AGUARDANDO_PAGAMENTO">Aguardando Pagamento</option>
-		      <option value="PAGO">Pago</option>
-		      <option value="CANCELADO">Cancelado</option>
-		    </select>
-		  </div>
-          <div>
-            <label class="block text-sm font-medium mb-1">Itens do Pedido</label>
-            <div id="itensContainer"></div>
-            <button type="button" id="addItem" class="mt-2 text-purple-600 hover:underline">+ Adicionar Item</button>
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-1">Pagamentos</label>
-            <div id="pagamentosContainer"></div>
-            <button type="button" id="addPagamento" class="mt-2 text-purple-600 hover:underline">+ Adicionar Pagamento</button>
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-1">Observação</label>
-            <textarea id="observacao" class="w-full border border-purple-300 rounded px-3 py-2"></textarea>
-          </div>
-          <div class="flex justify-end gap-2">
-            <button type="button" id="btnCloseModal" class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400">Cancelar</button>
-            <button type="submit" class="px-4 py-2 rounded bg-purple-600 text-white hover:bg-purple-700">Salvar</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </main>
+			<div id="modal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
+				<div
+					class="bg-white rounded-lg shadow-lg w-full max-w-2xl p-6 modal scale-95 opacity-0 overflow-y-auto max-h-[90vh]">
+					<h2 class="text-xl font-bold text-purple-700 mb-4">Cadastrar Pedido</h2>
+					<form id="pedidoForm" class="space-y-4">
+						<div>
+							<label class="block text-sm font-medium mb-1">Cliente</label>
+							<select id="clienteId" required
+								class="w-full border border-purple-300 rounded px-3 py-2"></select>
+						</div>
+						<div>
+							<label class="block text-sm font-medium mb-1">Status</label>
+							<select id="status" required
+								class="w-full border border-purple-300 rounded px-3 py-2 focus:ring-2 focus:ring-purple-500">
+								<option value="Aguardando Pagamento">Aguardando Pagamento</option>
+								<option value="Pago">Pago</option>
+								<option value="Cancelado">Cancelado</option>
+							</select>
+						</div>
+						<div>
+							<label class="block text-sm font-medium mb-1">Itens do Pedido</label>
+							<datalist id="produtosList"></datalist>
+							<div id="itensContainer"></div>
+							<button type="button" id="addItem" class="mt-2 text-purple-600 hover:underline">+ Adicionar
+								Item</button>
+						</div>
+						<div>
+							<label class="block text-sm font-medium mb-1">Pagamentos</label>
+							<div id="pagamentosContainer"></div>
+							<button type="button" id="addPagamento" class="mt-2 text-purple-600 hover:underline">+
+								Adicionar Pagamento</button>
+						</div>
+						<div>
+							<label class="block text-sm font-medium mb-1">Observação</label>
+							<textarea id="observacao"
+								class="w-full border border-purple-300 rounded px-3 py-2"></textarea>
+						</div>
+						<div class="flex justify-end gap-2">
+							<button type="button" id="btnCloseModal"
+								class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400">Cancelar</button>
+							<button type="submit"
+								class="px-4 py-2 rounded bg-purple-600 text-white hover:bg-purple-700">Salvar</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</main>
+		<tbody id="pedidosTable" class="divide-y"></tbody>
+		</table>
+	</div>
 
-  <script>
-	lucide.createIcons();
+	<!-- Modal -->
+	<div id="modal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
+		<div
+			class="bg-white rounded-lg shadow-lg w-full max-w-2xl p-6 modal scale-95 opacity-0 overflow-y-auto max-h-[90vh]">
+			<h2 class="text-xl font-bold text-purple-700 mb-4">Cadastrar Pedido</h2>
+			<form id="pedidoForm" class="space-y-4">
+				<div>
+					<label class="block text-sm font-medium mb-1">Cliente</label>
+					<select id="clienteId" required class="w-full border border-purple-300 rounded px-3 py-2"></select>
+				</div>
+				<div>
+					<label class="block text-sm font-medium mb-1">Status</label>
+					<select id="status" required
+						class="w-full border border-purple-300 rounded px-3 py-2 focus:ring-2 focus:ring-purple-500">
+						<option value="AGUARDANDO_PAGAMENTO">Aguardando Pagamento</option>
+						<option value="PAGO">Pago</option>
+						<option value="CANCELADO">Cancelado</option>
+					</select>
+				</div>
+				<div>
+					<label class="block text-sm font-medium mb-1">Itens do Pedido</label>
+					<div id="itensContainer"></div>
+					<button type="button" id="addItem" class="mt-2 text-purple-600 hover:underline">+ Adicionar
+						Item</button>
+				</div>
+				<div>
+					<label class="block text-sm font-medium mb-1">Pagamentos</label>
+					<div id="pagamentosContainer"></div>
+					<button type="button" id="addPagamento" class="mt-2 text-purple-600 hover:underline">+ Adicionar
+						Pagamento</button>
+				</div>
+				<div>
+					<label class="block text-sm font-medium mb-1">Observação</label>
+					<textarea id="observacao" class="w-full border border-purple-300 rounded px-3 py-2"></textarea>
+				</div>
+				<div class="flex justify-end gap-2">
+					<button type="button" id="btnCloseModal"
+						class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400">Cancelar</button>
+					<button type="submit"
+						class="px-4 py-2 rounded bg-purple-600 text-white hover:bg-purple-700">Salvar</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	</main>
 
-	const modal = document.getElementById("modal");
-	const btnOpenModal = document.getElementById("btnOpenModal");
-	const btnCloseModal = document.getElementById("btnCloseModal");
-	const pedidosTable = document.getElementById("pedidosTable");
-	const pedidoForm = document.getElementById("pedidoForm");
-	const clienteId = document.getElementById("clienteId");
-	const status = document.getElementById("status");
-	const observacao = document.getElementById("observacao");
-	const itensContainer = document.getElementById("itensContainer");
-	const pagamentosContainer = document.getElementById("pagamentosContainer");
-	const addItemBtn = document.getElementById("addItem");
-	const addPagamentoBtn = document.getElementById("addPagamento");
-	const barraBusca = document.getElementById("barraBusca");
-	const btnAnterior = document.getElementById("btnAnterior");
-	const btnProxima = document.getElementById("btnProxima");
-	const numeroPagina = document.getElementById("numeroPagina");
-	
-	let pedidoEditandoId = null;
-	let clientes = [];
-	let produtos = [];
-	let pedidos = [];
-	let paginaAtual = 0;
-	const tamanhoPagina = 15;
+	<script>
+		lucide.createIcons();
 
-	async function carregarClientes() {
-	  const res = await fetch("/clientes");
-	  clientes = await res.json();
-	  clienteId.innerHTML = clientes.map(c => `<option value="${c.id}">${c.nome}</option>`).join('');
-	}
+		const modal = document.getElementById("modal");
+		const btnOpenModal = document.getElementById("btnOpenModal");
+		const btnCloseModal = document.getElementById("btnCloseModal");
+		const pedidosTable = document.getElementById("pedidosTable");
+		const pedidoForm = document.getElementById("pedidoForm");
+		const clienteId = document.getElementById("clienteId");
+		const status = document.getElementById("status");
+		const observacao = document.getElementById("observacao");
+		const itensContainer = document.getElementById("itensContainer");
+		const pagamentosContainer = document.getElementById("pagamentosContainer");
+		const addItemBtn = document.getElementById("addItem");
+		const addPagamentoBtn = document.getElementById("addPagamento");
+		const barraBusca = document.getElementById("barraBusca");
+		const btnAnterior = document.getElementById("btnAnterior");
+		const btnProxima = document.getElementById("btnProxima");
+		const numeroPagina = document.getElementById("numeroPagina");
 
-	async function carregarProdutos() {
-	  const res = await fetch("/produtos");
-	  produtos = await res.json();
-	}
+		let pedidoEditandoId = null;
+		let clientes = [];
+		let produtos = [];
+		let pedidos = [];
+		let paginaAtual = 0;
+		const tamanhoPagina = 15;
 
-	function criarItem(produtoSelecionado = null, quantidade = 1, preco = null) {
-	  const div = document.createElement("div");
-	  div.className = "flex gap-2 mb-2";
+		async function carregarClientes() {
+			const res = await fetch("/clientes");
+			clientes = await res.json();
+			clienteId.innerHTML = clientes.map(c => `<option value="${c.id}">${c.nome}</option>`).join('');
+		}
 
-	  const options = produtos.map(p =>
-	    `<option value="${p.id}" data-preco="${p.preco}" ${produtoSelecionado == p.id ? 'selected' : ''}>${p.nome}</option>`
-	  ).join('');
+		async function carregarProdutos() {
+			const res = await fetch("/produtos");
+			produtos = await res.json();
+			const list = document.getElementById("produtosList");
+			list.innerHTML = produtos
+				.map(p => `<option data-id="${p.id}" data-preco="${p.preco}" value="${p.nome}"></option>`)
+				.join('');
+		}
 
-	  div.innerHTML = `
-	    <select class="produtoId border px-2 py-1 rounded flex-1">${options}</select>
-	    <input type="number" value="${quantidade}" placeholder="Qtd" class="quantidade border px-2 py-1 rounded w-20" />
-	    <input type="number" step="0.01" placeholder="Preço" class="preco border px-2 py-1 rounded w-24" value="${preco ?? ''}" />
-	  `;
+		function criarItem(itemId = null, produtoSelecionado = null, quantidade = 1, preco = null) {
+			const div = document.createElement("div");
+			div.className = "flex gap-2 mb-2 items-center";
+			if (itemId) div.dataset.itemId = itemId;
 
-	  const select = div.querySelector(".produtoId");
-	  const precoInput = div.querySelector(".preco");
+			const produto = produtos.find(p => p.id === produtoSelecionado);
+			const nomeProduto = produto ? produto.nome : "";
 
-	  const atualizarPreco = () => {
-	    const selected = select.options[select.selectedIndex];
-	    precoInput.value = selected.getAttribute("data-preco");
-	  };
+			div.innerHTML = `
+	           <input type="text" class="produtoBusca border px-2 py-1 rounded flex-1" list="produtosList" value="${nomeProduto}" placeholder="Buscar produto..." />
+	           <input type="hidden" class="produtoId" value="${produtoSelecionado ?? ''}" />
+	           <input type="number" value="${quantidade}" placeholder="Qtd" class="quantidade border px-2 py-1 rounded w-20" />
+	           <input type="number" step="0.01" placeholder="Preço" class="preco border px-2 py-1 rounded w-24" value="${preco ?? ''}" />
+	           <button type="button" class="removeItem text-red-600"><i data-lucide="trash-2"></i></button>
+	         `;
 
-	  if (preco === null) atualizarPreco();
+			const buscaInput = div.querySelector(".produtoBusca");
+			const idInput = div.querySelector(".produtoId");
+			const precoInput = div.querySelector(".preco");
 
-	  select.addEventListener("change", atualizarPreco);
-	  itensContainer.appendChild(div);
-	}
+			if (preco === null && produto) {
+				precoInput.value = produto.preco;
+			}
 
-	function criarPagamento(tipo = "DINHEIRO", parcelas = "", valor = "") {
-	  const div = document.createElement("div");
-	  div.className = "flex gap-2 mb-2";
-	  div.innerHTML = `
+			const atualizarProduto = () => {
+				const option = Array.from(document.getElementById("produtosList").options)
+					.find(o => o.value === buscaInput.value);
+				if (option) {
+					idInput.value = option.dataset.id;
+					precoInput.value = option.dataset.preco;
+				}
+			};
+
+			buscaInput.addEventListener("input", () => {
+				const termo = buscaInput.value.toLowerCase();
+				const list = document.getElementById("produtosList");
+				list.innerHTML = produtos
+					.filter(p => p.nome.toLowerCase().includes(termo))
+					.map(p => `<option data-id="${p.id}" data-preco="${p.preco}" value="${p.nome}"></option>`)
+					.join('');
+			});
+
+			buscaInput.addEventListener("change", atualizarProduto);
+
+			const remover = div.querySelector(".removeItem");
+			remover.addEventListener("click", async () => {
+				if (div.dataset.itemId) {
+					const token = await getCsrfToken();
+					await fetch(`/pedidos/${pedidoForm.dataset.id}/itens/${div.dataset.itemId}`, {
+						method: "DELETE",
+						headers: {"X-XSRF-TOKEN": token},
+						credentials: "same-origin"
+					});
+				}
+				div.remove();
+			});
+
+			itensContainer.appendChild(div);
+			lucide.createIcons();
+		}
+
+		function criarPagamento(tipo = "DINHEIRO", parcelas = "", valor = "") {
+			const div = document.createElement("div");
+			div.className = "flex gap-2 mb-2";
+			div.innerHTML = `
 	    <select class="tipo border px-2 py-1 rounded flex-1">
 	      <option value="DINHEIRO" ${tipo === "DINHEIRO" ? "selected" : ""}>Dinheiro</option>
 	      <option value="PIX" ${tipo === "PIX" ? "selected" : ""}>PIX</option>
@@ -245,103 +326,104 @@
 	    <input type="number" placeholder="Parcelas" value="${parcelas}" class="parcelas border px-2 py-1 rounded w-24" />
 	    <input type="number" step="0.01" placeholder="Valor" value="${valor}" class="valor border px-2 py-1 rounded w-24" />
 	  `;
-	  pagamentosContainer.appendChild(div);
-	}
+			pagamentosContainer.appendChild(div);
+		}
 
-	btnOpenModal.onclick = async () => {
-	  pedidoForm.dataset.id = "";
-	  await carregarClientes();
-	  await carregarProdutos();
-	  pedidoForm.reset();
-	  itensContainer.innerHTML = "";
-	  pagamentosContainer.innerHTML = "";
-	  criarItem();
-	  criarPagamento();
-	  modal.classList.remove("hidden");
-	  setTimeout(() => modal.querySelector(".modal").classList.add("scale-100", "opacity-100"), 10);
-	};
+		btnOpenModal.onclick = async () => {
+		        pedidoForm.dataset.id = "";
+		        pedidoEditandoId = null;
+		        await carregarClientes();
+		        await carregarProdutos();
+		        pedidoForm.reset();
+		        itensContainer.innerHTML = "";
+		        pagamentosContainer.innerHTML = "";
+		        criarItem();
+		        criarPagamento();
+		        modal.classList.remove("hidden");
+		        setTimeout(() => modal.querySelector(".modal").classList.add("scale-100", "opacity-100"), 10);
+		      };
 
-	btnCloseModal.onclick = () => {
-	  modal.querySelector(".modal").classList.remove("scale-100", "opacity-100");
-	  setTimeout(() => modal.classList.add("hidden"), 200);
-	};
+		btnCloseModal.onclick = () => {
+			modal.querySelector(".modal").classList.remove("scale-100", "opacity-100");
+			setTimeout(() => modal.classList.add("hidden"), 200);
+		};
 
-	addItemBtn.onclick = () => criarItem();
-	addPagamentoBtn.onclick = () => criarPagamento();
+		addItemBtn.onclick = () => criarItem();
+		addPagamentoBtn.onclick = () => criarPagamento();
 
-	pedidoForm.onsubmit = async (e) => {
-	  e.preventDefault();
+		pedidoForm.onsubmit = async (e) => {
+			e.preventDefault();
 
-	  const itens = Array.from(itensContainer.children).map(row => ({
-	    produtoId: parseInt(row.querySelector(".produtoId").value),
-	    quantidade: parseInt(row.querySelector(".quantidade").value),
-	    preco: parseFloat(row.querySelector(".preco").value)
-	  }));
+			const itens = Array.from(itensContainer.children).map(row => ({
+				produtoId: parseInt(row.querySelector(".produtoId").value),
+				quantidade: parseInt(row.querySelector(".quantidade").value),
+				preco: parseFloat(row.querySelector(".preco").value)
+			}));
 
-	  const pagamentos = Array.from(pagamentosContainer.children).map(row => ({
-	    tipo: row.querySelector(".tipo").value,
-	    parcelas: parseInt(row.querySelector(".parcelas").value),
-	    valor: parseFloat(row.querySelector(".valor").value)
-	  }));
+			const pagamentos = Array.from(pagamentosContainer.children).map(row => ({
+				tipo: row.querySelector(".tipo").value,
+				parcelas: parseInt(row.querySelector(".parcelas").value),
+				valor: parseFloat(row.querySelector(".valor").value)
+			}));
 
 
-	  const agora = new Date();
-	  const dataFormatada = agora.toISOString().slice(0, 19); // Ex: "2025-05-29T07:30:00"
+			const agora = new Date();
+			const dataFormatada = agora.toISOString().slice(0, 19); // Ex: "2025-05-29T07:30:00"
 
-	  const pedido = {
-	    clienteId: parseInt(clienteId.value),
-	    status: status.value,
-	    observacao: observacao.value,
-	    data: dataFormatada, // <-- agora está presente
-	    itens,
-	    pagamentos
-	  };
+			const pedido = {
+				clienteId: parseInt(clienteId.value),
+				status: status.value,
+				observacao: observacao.value,
+				data: dataFormatada, // <-- agora está presente
+				itens,
+				pagamentos
+			};
 
-	  const token = await getCsrfToken();
-	  const url = pedidoEditandoId ? `/pedidos/${pedidoEditandoId}` : "/pedidos";
-	  const method = pedidoEditandoId ? "PUT" : "POST";
-	  if (!pedidoEditandoId) {
-	    delete pedido.id; // remove o ID se for novo pedido
-	  }
-	  
-	  const res = await fetch(url, {
-	    method,
-	    headers: {
-	      "Content-Type": "application/json",
-	      "X-XSRF-TOKEN": token
-	    },
-	    credentials: "same-origin",
-	    body: JSON.stringify(pedido)
-	  });
+			const token = await getCsrfToken();
+			const url = pedidoEditandoId ? `/pedidos/${pedidoEditandoId}` : "/pedidos";
+			const method = pedidoEditandoId ? "PUT" : "POST";
+			if (!pedidoEditandoId) {
+				delete pedido.id; // remove o ID se for novo pedido
+			}
 
-	  if (res.ok) {
-	    alert("Pedido salvo com sucesso!");
-	    modal.classList.add("hidden");
-	    await listarPedidos();
-	  } else {
-	    alert("Erro ao salvar pedido.");
-	  }
-	};
-	async function listarPedidos() {
-	  const res = await fetch("/pedidos");
-	  pedidos = await res.json();
-	  renderTabela();
-	}
+			const res = await fetch(url, {
+				method,
+				headers: {
+					"Content-Type": "application/json",
+					"X-XSRF-TOKEN": token
+				},
+				credentials: "same-origin",
+				body: JSON.stringify(pedido)
+			});
 
-	function renderTabela() {
-		let termo = barraBusca.value.toLowerCase();
-		let filtrados = pedidos.filter(p => {
-		  const clienteNome = clientes.find(c => c.id === p.clienteId)?.nome?.toLowerCase() || '';
-		  const statusPedido = p.status.toLowerCase();
-		  const dataPedido = new Date(p.data).toLocaleDateString('pt-BR');
+			if (res.ok) {
+				alert("Pedido salvo com sucesso!");
+				modal.classList.add("hidden");
+				await listarPedidos();
+			} else {
+				alert("Erro ao salvar pedido.");
+			}
+		};
+		async function listarPedidos() {
+			const res = await fetch("/pedidos");
+			pedidos = await res.json();
+			renderTabela();
+		}
 
-		  return clienteNome.includes(termo) || statusPedido.includes(termo) || dataPedido.includes(termo);
-		});
+		function renderTabela() {
+			let termo = barraBusca.value.toLowerCase();
+			let filtrados = pedidos.filter(p => {
+				const clienteNome = clientes.find(c => c.id === p.clienteId)?.nome?.toLowerCase() || '';
+				const statusPedido = p.status.toLowerCase();
+				const dataPedido = new Date(p.data).toLocaleDateString('pt-BR');
 
-	  const inicio = paginaAtual * tamanhoPagina;
-	  const pagina = filtrados.slice(inicio, inicio + tamanhoPagina);
+				return clienteNome.includes(termo) || statusPedido.includes(termo) || dataPedido.includes(termo);
+			});
 
-	  pedidosTable.innerHTML = pagina.map(p => `
+			const inicio = paginaAtual * tamanhoPagina;
+			const pagina = filtrados.slice(inicio, inicio + tamanhoPagina);
+
+			pedidosTable.innerHTML = pagina.map(p => `
 	    <tr>
 	      <td class="p-3">${clientes.find(c => c.id === p.clienteId)?.nome || "N/A"}</td>
 	      <td class="p-3">${new Date(p.data).toLocaleDateString()}</td>
@@ -356,95 +438,97 @@
 	    </tr>
 	  `).join('');
 
-	  btnAnterior.disabled = paginaAtual === 0;
-	  btnProxima.disabled = (paginaAtual + 1) * tamanhoPagina >= filtrados.length;
-	  numeroPagina.textContent = paginaAtual + 1;
-	}
+			btnAnterior.disabled = paginaAtual === 0;
+			btnProxima.disabled = (paginaAtual + 1) * tamanhoPagina >= filtrados.length;
+			numeroPagina.textContent = paginaAtual + 1;
+		}
 
-	btnAnterior.onclick = () => {
-	  if (paginaAtual > 0) {
-	    paginaAtual--;
-	    renderTabela();
-	  }
-	};
-	
-	barraBusca.addEventListener("input", () => {
-	  paginaAtual = 0;
-	  renderTabela();
-	});
+		btnAnterior.onclick = () => {
+			if (paginaAtual > 0) {
+				paginaAtual--;
+				renderTabela();
+			}
+		};
 
-	btnProxima.onclick = () => {
-	  paginaAtual++;
-	  renderTabela();
-	};
+		barraBusca.addEventListener("input", () => {
+			paginaAtual = 0;
+			renderTabela();
+		});
 
-	async function excluirPedido(id) {
-	  if (!confirm("Deseja excluir este pedido?")) return;
+		btnProxima.onclick = () => {
+			paginaAtual++;
+			renderTabela();
+		};
 
-	  const resToken = await fetch("/csrf-token", { credentials: "same-origin" });
-	  const token = (await resToken.json()).token;
+		async function excluirPedido(id) {
+			if (!confirm("Deseja excluir este pedido?")) return;
 
-	  try {
-	    const res = await fetch(`/pedidos/${id}`, {
-	      method: "DELETE",
-	      headers: {
-	        "X-XSRF-TOKEN": token
-	      },
-	      credentials: "same-origin"
-	    });
+			const resToken = await fetch("/csrf-token", {credentials: "same-origin"});
+			const token = (await resToken.json()).token;
 
-	    if (res.ok) {
-	      alert("Pedido excluído com sucesso!");
-	      await listarPedidos();
-	    } else {
-	      alert("Erro ao excluir pedido. Verifique permissões.");
-	    }
-	  } catch (error) {
-	    alert("Erro ao excluir pedido.");
-	  }
-	}
+			try {
+				const res = await fetch(`/pedidos/${id}`, {
+					method: "DELETE",
+					headers: {
+						"X-XSRF-TOKEN": token
+					},
+					credentials: "same-origin"
+				});
 
-	async function editarPedido(id) {
-	  const res = await fetch(`/pedidos/${id}`);
-	  const pedido = await res.json();
+				if (res.ok) {
+					alert("Pedido excluído com sucesso!");
+					await listarPedidos();
+				} else {
+					alert("Erro ao excluir pedido. Verifique permissões.");
+				}
+			} catch (error) {
+				alert("Erro ao excluir pedido.");
+			}
+		}
 
-	  pedidoForm.dataset.id = pedido.id;
-	  clienteId.value = pedido.clienteId;
-	  status.value = pedido.status;
-	  observacao.value = pedido.observacao || "";
+		async function editarPedido(id) {
+			const res = await fetch(`/pedidos/${id}`);
+			const pedido = await res.json();
 
-	  itensContainer.innerHTML = "";
-	  for (const item of pedido.itens) {
-	    criarItem(item.produtoId, item.quantidade, item.preco);
-	  }
+			pedidoForm.dataset.id = pedido.id;
+			         pedidoEditandoId = pedido.id;
+			         clienteId.value = pedido.clienteId;
+			status.value = pedido.status;
+			observacao.value = pedido.observacao || "";
 
-	  pagamentosContainer.innerHTML = "";
-	  for (const pagamento of pedido.pagamentos) {
-	    criarPagamento(pagamento.tipo, pagamento.parcelas, pagamento.valor);
-	  }
+			itensContainer.innerHTML = "";
+			for (const item of pedido.itens) {
+			           criarItem(item.id, item.produtoId, item.quantidade, item.preco);
+			         }
+					 
+			pagamentosContainer.innerHTML = "";
+			for (const pagamento of pedido.pagamentos) {
+				criarPagamento(pagamento.tipo, pagamento.parcelas, pagamento.valor);
+			}
 
-	  modal.classList.remove("hidden");
-	  setTimeout(() => modal.querySelector(".modal").classList.add("scale-100", "opacity-100"), 10);
-	}
+			modal.classList.remove("hidden");
+			setTimeout(() => modal.querySelector(".modal").classList.add("scale-100", "opacity-100"), 10);
+		}
 
-	
-	async function getCsrfToken() {
-	  const res = await fetch("/csrf-token", { credentials: "same-origin" });
-	  const data = await res.json();
-	  return data.token;
-	}
-	// Carregamento inicial
-	(async () => {
-	  await carregarClientes();
-	  await carregarProdutos();
-	  await listarPedidos();
-	})();
 
-	// Sidebar toggle
-		      document.getElementById('menu-toggle').addEventListener('click', () => {
-		        document.getElementById('sidebar').classList.toggle('-translate-x-full');
-		      });
-  </script>
+		async function getCsrfToken() {
+			const res = await fetch("/csrf-token", {credentials: "same-origin"});
+			const data = await res.json();
+			return data.token;
+		}
+		// Carregamento inicial
+		(async () => {
+			await carregarClientes();
+			await carregarProdutos();
+			await listarPedidos();
+		})();
+
+		// Sidebar toggle
+		document.getElementById('menu-toggle').addEventListener('click', () => {
+			document.getElementById('sidebar').classList.toggle('-translate-x-full');
+		});
+	</script>
 
 </body>
+
 </html>

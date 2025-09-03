@@ -43,6 +43,20 @@ public class ProdutoService {
                 .map(p -> modelMapper.map(p, ProdutoDTO.class))
                 .collect(Collectors.toList());
     }
+    
+    public List<ProdutoDTO> buscarPorNome(String nome) {
+        return produtoRepository.findByNomeContainingIgnoreCase(nome).stream()
+                .map(p -> modelMapper.map(p, ProdutoDTO.class))
+                .collect(Collectors.toList());
+    }
+    
+    public ProdutoDTO buscarPorId(Long id) {
+        Produto produto = produtoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Produto não encontrado com id: " + id));
+        return modelMapper.map(produto, ProdutoDTO.class);
+    }
+
+
 
     public ProdutoDTO atualizar(Long id, ProdutoDTO dto) {
     	  Produto produto = produtoRepository.findById(id)
