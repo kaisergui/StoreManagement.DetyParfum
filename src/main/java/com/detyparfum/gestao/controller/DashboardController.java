@@ -7,6 +7,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +32,7 @@ import jakarta.persistence.Query;
 @RestController
 @RequestMapping("/api/dashboard")
 @CrossOrigin(origins = "*")
+@Tag(name = "Dashboard", description = "Indicadores e relatórios do painel de gestão.")
 public class DashboardController {
 
     @PersistenceContext
@@ -43,6 +51,11 @@ public class DashboardController {
     private PagamentoRepository pagamentoRepository;
 
     @GetMapping("/clientes-mais-pedidos")
+    @Operation(summary = "Clientes com mais pedidos", description = "Retorna ranking de clientes por quantidade de pedidos.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Lista de clientes e quantidade de pedidos",
+            content = @Content(array = @ArraySchema(schema = @Schema(implementation = Map.class))))
+    })
     public List<Map<String, Object>> getClientesMaisPedidos() {
         Query query = entityManager.createQuery("""
             SELECT p.cliente.nome, COUNT(p.id) 
@@ -62,6 +75,11 @@ public class DashboardController {
     }
 
     @GetMapping("/produtos-mais-vendidos")
+    @Operation(summary = "Produtos mais vendidos", description = "Retorna ranking de produtos por quantidade vendida.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Lista de produtos e quantidades vendidas",
+            content = @Content(array = @ArraySchema(schema = @Schema(implementation = Map.class))))
+    })
     public List<Map<String, Object>> getProdutosMaisVendidos() {
         Query query = entityManager.createQuery("""
             SELECT i.produto.nome, SUM(i.quantidade) 
@@ -81,6 +99,11 @@ public class DashboardController {
     }
 
     @GetMapping("/pagamentos-pendentes")
+    @Operation(summary = "Pagamentos pendentes", description = "Retorna clientes com valores pendentes de pagamento.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Lista de clientes e valores pendentes",
+            content = @Content(array = @ArraySchema(schema = @Schema(implementation = Map.class))))
+    })
     public List<Map<String, Object>> getPagamentosPendentes() {
 		Query query = entityManager.createQuery("""
 				SELECT p.cliente.nome, SUM(i.preco * i.quantidade)
@@ -102,6 +125,11 @@ public class DashboardController {
     
     
     @GetMapping("/faturamento-mensal")
+    @Operation(summary = "Faturamento mensal", description = "Retorna o faturamento agrupado por mês.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Lista de meses e faturamento",
+            content = @Content(array = @ArraySchema(schema = @Schema(implementation = Map.class))))
+    })
     public List<Map<String, Object>> getFaturamentoMensal() {
         Query query = entityManager.createQuery("""
             SELECT 
@@ -128,6 +156,11 @@ public class DashboardController {
     }
     
     @GetMapping("/kpis")
+    @Operation(summary = "KPIs do painel", description = "Retorna os principais indicadores do negócio.")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Mapa de KPIs",
+            content = @Content(schema = @Schema(implementation = Map.class)))
+    })
     public Map<String, Object> getKPIs() {
         Map<String, Object> kpis = new HashMap<>();
 

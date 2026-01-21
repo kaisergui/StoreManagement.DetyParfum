@@ -36,7 +36,17 @@ public class WebSecurityConfig {
                 .ignoringRequestMatchers(new AntPathRequestMatcher("/login", "POST"))
             )
             .authorizeHttpRequests(auth -> auth
-            	.requestMatchers("/login.html", "/login", "/css/**", "/js/**", "/images/**", "/assets/**").permitAll()
+            	.requestMatchers(
+                    "/login.html",
+                    "/login",
+                    "/css/**",
+                    "/js/**",
+                    "/images/**",
+                    "/assets/**",
+                    "/swagger-ui.html",
+                    "/swagger-ui/**",
+                    "/v3/api-docs/**"
+                ).permitAll()
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form

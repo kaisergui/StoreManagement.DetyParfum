@@ -3,12 +3,26 @@ package com.detyparfum.gestao.dto;
 import java.util.Date;
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(name = "PedidoDetalhado", description = "Detalhamento de pedido com itens e pagamentos.")
 public class PedidoDetalhadoDTO {
-	 private Long id;
+	 @Schema(description = "Identificador do pedido", example = "1")
+	    private Long id;
+
+	    @Schema(description = "Data do pedido", example = "2024-01-10T10:30:00Z")
 	    private Date data;
+
+	    @Schema(description = "Status do pedido", example = "PAGO")
 	    private String status;
+
+	    @Schema(description = "Observação do pedido", example = "Cliente buscou na loja.")
 	    private String observacao;
+
+	    @Schema(description = "Pagamentos vinculados")
 	    private List<PagamentoDTO> pagamentos;
+
+	    @Schema(description = "Itens do pedido")
 	    private List<ItemPedidoDetalhadoDTO> itens;
 
 	    // Getters e Setters

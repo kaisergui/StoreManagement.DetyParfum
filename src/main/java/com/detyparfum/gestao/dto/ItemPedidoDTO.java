@@ -2,13 +2,25 @@ package com.detyparfum.gestao.dto;
 
 import java.io.Serializable;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(name = "ItemPedido", description = "Item de um pedido com quantidade e preço.")
 public class ItemPedidoDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    @Schema(description = "Identificador do item", example = "1")
     private Long id;
+
+    @Schema(description = "Quantidade do item", example = "2")
     private Integer quantidade;
+
+    @Schema(description = "Preço unitário do item", example = "199.90")
     private Double preco;
+
+    @Schema(description = "Identificador do produto", example = "1")
     private Long produtoId;
+
+    @Schema(description = "Identificador do pedido", example = "1")
     private Long pedidoId;
 
     public ItemPedidoDTO() {}

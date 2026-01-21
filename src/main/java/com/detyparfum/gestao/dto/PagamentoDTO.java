@@ -2,13 +2,25 @@ package com.detyparfum.gestao.dto;
 
 import java.io.Serializable;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(name = "Pagamento", description = "Informações de pagamento de um pedido.")
 public class PagamentoDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    @Schema(description = "Identificador do pagamento", example = "1")
     private Long id;
+
+    @Schema(description = "Tipo de pagamento", example = "CARTAO")
     private String tipo;
+
+    @Schema(description = "Quantidade de parcelas", example = "3")
     private Integer parcelas;
+
+    @Schema(description = "Valor do pagamento", example = "299.90")
     private Double valor;
+
+    @Schema(description = "Identificador do pedido", example = "1")
     private Long pedidoId;
 
     public PagamentoDTO() {}

@@ -5,16 +5,31 @@ import java.util.Date;
 import java.util.List;
 
 import com.detyparfum.gestao.entities.enums.StatusPedido;
+import io.swagger.v3.oas.annotations.media.Schema;
 
+@Schema(name = "Pedido", description = "Representa um pedido com itens e pagamentos.")
 public class PedidoDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
+    @Schema(description = "Identificador do pedido", example = "1")
     private Long id;
+
+    @Schema(description = "Data de criação do pedido", example = "2024-01-10T10:30:00Z")
     private Date data;
+
+    @Schema(description = "Status do pedido", example = "AGUARDANDO_PAGAMENTO")
     private StatusPedido status;
+
+    @Schema(description = "Observações adicionais", example = "Entregar no período da tarde.")
     private String observacao;
+
+    @Schema(description = "Identificador do cliente", example = "1")
     private Long clienteId;
+
+    @Schema(description = "Itens do pedido")
     private List<ItemPedidoDTO> itens;
+
+    @Schema(description = "Pagamentos vinculados ao pedido")
     private List<PagamentoDTO> pagamentos;
 
     public PedidoDTO() {}
