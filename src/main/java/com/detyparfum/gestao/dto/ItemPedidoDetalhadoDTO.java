@@ -11,9 +11,13 @@ public class ItemPedidoDetalhadoDTO {
     @Schema(description = "Preço do item", example = "199.90")
     private Double preco;
 
-    public ItemPedidoDetalhadoDTO(String nomeProduto, Double preco) {
+    @Schema(description = "Quantidade do item", example = "2")
+    private Integer quantidade;
+
+    public ItemPedidoDetalhadoDTO(String nomeProduto, Double preco, Integer quantidade) {
         this.nomeProduto = nomeProduto;
         this.preco = preco;
+        this.quantidade = quantidade;
     }
 
     public String getNomeProduto() { return nomeProduto; }
@@ -21,4 +25,7 @@ public class ItemPedidoDetalhadoDTO {
 
     public Double getPreco() { return preco; }
     public void setPreco(Double preco) { this.preco = preco; }
+
+    public Integer getQuantidade() { return quantidade; }
+    public void setQuantidade(Integer quantidade) { this.quantidade = quantidade; }
 }

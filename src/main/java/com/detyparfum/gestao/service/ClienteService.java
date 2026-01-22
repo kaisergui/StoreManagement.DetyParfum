@@ -100,8 +100,9 @@ public class ClienteService {
 
                 List<ItemPedidoDetalhadoDTO> itens = p.getItens().stream().map(i ->
                     new ItemPedidoDetalhadoDTO(
-                        i.getProduto().getNome(),
-                        i.getProduto().getPreco()
+                        i.getProduto() != null ? i.getProduto().getNome() : "Produto não identificado",
+                        i.getPreco(),
+                        i.getQuantidade()
                     )
                 ).collect(Collectors.toList());
 
