@@ -105,13 +105,13 @@ public class DashboardController {
             content = @Content(array = @ArraySchema(schema = @Schema(implementation = Map.class))))
     })
     public List<Map<String, Object>> getPagamentosPendentes() {
-		Query query = entityManager.createQuery("""
-				SELECT p.cliente.nome, SUM(i.preco * i.quantidade)
-				FROM Pedido p
-				JOIN p.itens i
-				WHERE p.status = 'AGUARDANDO_PAGAMENTO'
-				GROUP BY p.cliente.nome
-				        """);
+        Query query = entityManager.createQuery("""
+            SELECT p.cliente.nome, COALESCE(SUM(i.preco * i.quantidade), 0)
+            FROM Pedido p
+            JOIN p.itens i
+            WHERE p.status = 'AGUARDANDO_PAGAMENTO'
+            GROUP BY p.cliente.nome
+        """);
         List<Object[]> resultList = query.getResultList();
         List<Map<String, Object>> response = new ArrayList<>();
         for (Object[] row : resultList) {
@@ -133,13 +133,13 @@ public class DashboardController {
     public List<Map<String, Object>> getFaturamentoMensal() {
         Query query = entityManager.createQuery("""
             SELECT 
-                to_char(p.data, 'YYYY-MM'),
-                SUM(i.preco * i.quantidade)
+                FUNCTION('to_char', p.data, 'YYYY-MM'),
+                COALESCE(SUM(i.preco * i.quantidade), 0)
             FROM Pedido p
-            JOIN ItemPedido i ON p.id = i.pedido.id
+            JOIN p.itens i
             WHERE p.status = 'PAGO'
-            GROUP BY to_char(p.data, 'YYYY-MM')
-            ORDER BY to_char(p.data, 'YYYY-MM')
+            GROUP BY FUNCTION('to_char', p.data, 'YYYY-MM')
+            ORDER BY FUNCTION('to_char', p.data, 'YYYY-MM')
         """);
 
         List<Object[]> resultList = query.getResultList();
@@ -170,8 +170,8 @@ public class DashboardController {
         kpis.put("totalClientes", totalClientes);
 
         // Produtos em Estoque
-        Query estoqueQuery = entityManager.createQuery("SELECT SUM(CASE WHEN p.estoque IS NULL THEN 0 ELSE p.estoque END) FROM Produto p");
-        Long produtosEstoque = (Long) estoqueQuery.getSingleResult();
+        Query estoqueQuery = entityManager.createQuery("SELECT SUM(COALESCE(p.estoque, 0)) FROM Produto p");
+        Number produtosEstoque = (Number) estoqueQuery.getSingleResult();
         kpis.put("produtosEstoque", produtosEstoque);
 
         // Pedidos do Mês atual
@@ -209,7 +209,14 @@ public class DashboardController {
         faturamentoQuery.setParameter("inicioMes", inicioMes.atStartOfDay());
         faturamentoQuery.setParameter("proximoMes", proximoMes.atStartOfDay());
         Object resultado = faturamentoQuery.getSingleResult();
-        BigDecimal faturamentoMensal = resultado != null ? BigDecimal.valueOf((Double) resultado) : BigDecimal.ZERO;
+        BigDecimal faturamentoMensal;
+        if (resultado == null) {
+            faturamentoMensal = BigDecimal.ZERO;
+        } else if (resultado instanceof BigDecimal resultadoBigDecimal) {
+            faturamentoMensal = resultadoBigDecimal;
+        } else {
+            faturamentoMensal = BigDecimal.valueOf(((Number) resultado).doubleValue());
+        }
         kpis.put("faturamentoMensal", faturamentoMensal);
 
         return kpis;
