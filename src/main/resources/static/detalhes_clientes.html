@@ -10,6 +10,10 @@
     body { font-family: 'Crimson Text', serif; }
     .card { transition: transform 0.2s; }
     .card:hover { transform: scale(1.01); }
+    .badge { border-radius: 9999px; padding: 2px 10px; font-size: 0.75rem; font-weight: 600; }
+    .badge-pago { background-color: #dcfce7; color: #166534; }
+    .badge-pendente { background-color: #fee2e2; color: #991b1b; }
+    .badge-cancelado { background-color: #e5e7eb; color: #374151; }
   </style>
 </head>
 <body class="bg-purple-50 text-gray-800 flex min-h-screen">
@@ -39,10 +43,64 @@
     </div>
 
     <section id="infoCliente" class="bg-white rounded-lg shadow p-6 mb-8">
-      <p><strong>Nome:</strong> <span id="nome"></span></p>
-      <p><strong>CPF:</strong> <span id="cpf"></span></p>
-      <p><strong>Telefone:</strong> <span id="telefone"></span></p>
-      <p><strong>Status de Pagamento:</strong> <span id="statusPagamento" class="font-bold"></span></p>
+      <div class="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+        <div>
+          <h2 id="nome" class="text-2xl font-semibold text-gray-800"></h2>
+          <p class="text-gray-600 mt-1">CPF: <span id="cpf"></span></p>
+          <p class="text-gray-600">Telefone: <span id="telefone"></span></p>
+          <p class="text-gray-600">E-mail: <span id="email"></span></p>
+        </div>
+        <div class="bg-purple-50 border border-purple-200 rounded-lg p-4 w-full md:w-80">
+          <p class="text-sm text-purple-700 font-semibold">Status financeiro</p>
+          <p id="statusPagamento" class="text-lg font-bold mt-2"></p>
+          <p id="resumoPendencias" class="text-sm text-purple-700 mt-1"></p>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+      <div class="bg-white rounded-lg shadow p-4">
+        <p class="text-sm text-gray-500">Pedidos</p>
+        <p id="kpiPedidos" class="text-2xl font-semibold text-gray-800">0</p>
+      </div>
+      <div class="bg-white rounded-lg shadow p-4">
+        <p class="text-sm text-gray-500">Total do cliente</p>
+        <p id="kpiTotal" class="text-2xl font-semibold text-gray-800">R$ 0,00</p>
+      </div>
+      <div class="bg-white rounded-lg shadow p-4">
+        <p class="text-sm text-gray-500">Total pago</p>
+        <p id="kpiPago" class="text-2xl font-semibold text-green-600">R$ 0,00</p>
+      </div>
+      <div class="bg-white rounded-lg shadow p-4">
+        <p class="text-sm text-gray-500">Total pendente</p>
+        <p id="kpiPendente" class="text-2xl font-semibold text-red-600">R$ 0,00</p>
+      </div>
+    </section>
+
+    <section class="bg-white rounded-lg shadow p-4 mb-6">
+      <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div class="w-full md:w-1/2">
+          <label class="text-sm text-gray-600" for="filtroBusca">Buscar pedido</label>
+          <input id="filtroBusca" type="text" placeholder="Buscar por status, data ou observação" class="w-full border border-purple-200 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-400" />
+        </div>
+        <div class="flex flex-col gap-2 md:flex-row md:items-end">
+          <div>
+            <label class="text-sm text-gray-600" for="filtroStatus">Status</label>
+            <select id="filtroStatus" class="w-full md:w-48 border border-purple-200 rounded-lg px-3 py-2 bg-white focus:ring-2 focus:ring-purple-400">
+              <option value="">Todos</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-sm text-gray-600" for="ordenacao">Ordenar</label>
+            <select id="ordenacao" class="w-full md:w-48 border border-purple-200 rounded-lg px-3 py-2 bg-white focus:ring-2 focus:ring-purple-400">
+              <option value="data_desc">Data (mais recente)</option>
+              <option value="data_asc">Data (mais antiga)</option>
+              <option value="valor_desc">Valor (maior)</option>
+              <option value="valor_asc">Valor (menor)</option>
+            </select>
+          </div>
+        </div>
+      </div>
     </section>
 
     <h2 class="text-2xl font-semibold text-purple-700 mb-4">Pedidos</h2>
@@ -56,54 +114,184 @@
     const clienteId = urlParams.get('id');
     const clienteEndpoint = `/clientes/${clienteId}/detalhes`;
 
+    const formatCurrency = (value) => value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    const normalize = (value) => (value || '').toString().toLowerCase();
+    const isPendingStatus = (status) => normalize(status) === 'aguardando pagamento';
+    const pedidosContainer = document.getElementById('pedidosContainer');
+
+    const renderEmptyState = (message) => {
+      pedidosContainer.innerHTML = `
+        <div class="bg-white rounded-lg shadow p-6 text-center text-gray-600">
+          ${message}
+        </div>
+      `;
+    };
+
     async function carregarDetalhes() {
-      const res = await fetch(clienteEndpoint);
-      const cliente = await res.json();
+      if (!clienteId) {
+        renderEmptyState('Cliente não informado na URL.');
+        return;
+      }
+
+      pedidosContainer.innerHTML = `
+        <div class="bg-white rounded-lg shadow p-6 text-center text-gray-600">
+          Carregando detalhes do cliente...
+        </div>
+      `;
+
+      let cliente;
+      try {
+        const res = await fetch(clienteEndpoint);
+        if (!res.ok) {
+          throw new Error('Não foi possível carregar os detalhes do cliente.');
+        }
+        cliente = await res.json();
+      } catch (error) {
+        renderEmptyState('Erro ao carregar dados. Verifique sua conexão e tente novamente.');
+        return;
+      }
 
       document.getElementById('nome').textContent = cliente.nome;
       document.getElementById('cpf').textContent = cliente.cpf;
       document.getElementById('telefone').textContent = cliente.telefone;
+      document.getElementById('email').textContent = cliente.email || 'Não informado';
 
-      let totalDevendo = 0;
+      const pedidos = (cliente.pedidos || []).map(pedido => {
+        const itens = pedido.itens || [];
+        const pagamentos = pedido.pagamentos || [];
+        const totalItens = itens.reduce((acc, item) => acc + (item.preco || 0) * (item.quantidade || 0), 0);
+        const totalPago = pagamentos.reduce((acc, pag) => acc + (pag.valor || 0), 0);
+        const pendente = Math.max(totalItens - totalPago, 0);
+        return {
+          ...pedido,
+          totalItens,
+          totalPago,
+          pendente
+        };
+      });
 
-      const pedidosHTML = cliente.pedidos.map(pedido => {
-        const statusCor = pedido.status === 'PAGO' ? 'text-green-600' : 'text-red-600';
+      const totalPedidos = pedidos.length;
+      const totalCliente = pedidos.reduce((acc, pedido) => acc + pedido.totalItens, 0);
+      const totalPago = pedidos.reduce((acc, pedido) => acc + pedido.totalPago, 0);
+      const totalPendente = pedidos.reduce((acc, pedido) => acc + (isPendingStatus(pedido.status) ? pedido.pendente : 0), 0);
 
-        const itensHTML = pedido.itens.map(item => `
-          <li>${item.nomeProduto || 'Produto não identificado'} - R$ ${item.preco.toFixed(2).replace('.', ',')}</li>
-        `).join('');
-
-        const pagamentosHTML = pedido.pagamentos && pedido.pagamentos.length > 0
-          ? `<ul>${pedido.pagamentos.map(pag => `
-              <li>${pag.tipo || 'N/A'} - R$ ${pag.valor.toFixed(2).replace('.', ',')} (${pag.parcelas || 1}x)</li>
-            `).join('')}</ul>`
-          : `<p><strong>Forma de pagamento:</strong> N/A</p>`;
-
-        const total = pedido.pagamentos?.reduce((acc, pag) => acc + pag.valor, 0) || 0;
-        if (pedido.status !== 'PAGO') totalDevendo += total;
-
-        return `
-          <div class="bg-purple-100 p-6 rounded-lg shadow card">
-            <h3 class="text-lg font-semibold mb-2">Pedido #${pedido.id}</h3>
-            <p><strong>Data:</strong> ${new Date(pedido.data).toLocaleDateString()}</p>
-            ${pagamentosHTML}
-            <ul class="list-disc list-inside mt-2">${itensHTML}</ul>
-            <p class="mt-2 font-semibold">Total: R$ ${total.toFixed(2).replace('.', ',')}</p>
-            <p class="${statusCor} mt-1"><strong>Status:</strong> ${pedido.status}</p>
-          </div>
-        `;
-      }).join('');
-
-      document.getElementById('pedidosContainer').innerHTML = pedidosHTML;
+      document.getElementById('kpiPedidos').textContent = totalPedidos;
+      document.getElementById('kpiTotal').textContent = formatCurrency(totalCliente);
+      document.getElementById('kpiPago').textContent = formatCurrency(totalPago);
+      document.getElementById('kpiPendente').textContent = formatCurrency(totalPendente);
 
       const statusPagamento = document.getElementById('statusPagamento');
-      if (totalDevendo > 0) {
+      const resumoPendencias = document.getElementById('resumoPendencias');
+      statusPagamento.classList.remove('text-red-600', 'text-green-600');
+      if (totalPendente > 0) {
         statusPagamento.classList.add("text-red-600");
-        statusPagamento.textContent = `Devendo - R$ ${totalDevendo.toFixed(2).replace('.', ',')}`;
+        statusPagamento.textContent = `Pendente ${formatCurrency(totalPendente)}`;
+        resumoPendencias.textContent = 'Pedidos aguardando pagamento contabilizados.';
       } else {
         statusPagamento.classList.add("text-green-600");
-        statusPagamento.textContent = "Nenhuma pendência";
+        statusPagamento.textContent = "Sem pendências";
+        resumoPendencias.textContent = 'Todos os pedidos estão pagos ou cancelados.';
       }
+
+      const filtroStatus = document.getElementById('filtroStatus');
+      const statusUnicos = [...new Set(pedidos.map(p => p.status).filter(Boolean))];
+      filtroStatus.innerHTML = `<option value="">Todos</option>${statusUnicos.map(status => `<option value="${status}">${status}</option>`).join('')}`;
+
+      const renderPedidos = () => {
+        const termo = normalize(document.getElementById('filtroBusca').value);
+        const statusSelecionado = filtroStatus.value;
+        const ordenacao = document.getElementById('ordenacao').value;
+
+        const pedidosFiltrados = pedidos.filter(pedido => {
+          const dataPedido = pedido.data ? new Date(pedido.data).toLocaleDateString() : '';
+          const matchesBusca = normalize(pedido.status).includes(termo)
+            || normalize(pedido.observacao).includes(termo)
+            || normalize(dataPedido).includes(termo);
+          const matchesStatus = !statusSelecionado || pedido.status === statusSelecionado;
+          return matchesBusca && matchesStatus;
+        });
+
+        pedidosFiltrados.sort((a, b) => {
+          if (ordenacao === 'data_asc') return new Date(a.data) - new Date(b.data);
+          if (ordenacao === 'data_desc') return new Date(b.data) - new Date(a.data);
+          if (ordenacao === 'valor_asc') return a.totalItens - b.totalItens;
+          if (ordenacao === 'valor_desc') return b.totalItens - a.totalItens;
+          return 0;
+        });
+
+        const pedidosHTML = pedidosFiltrados.map(pedido => {
+          const statusBadge = normalize(pedido.status) === 'pago'
+            ? 'badge badge-pago'
+            : isPendingStatus(pedido.status)
+              ? 'badge badge-pendente'
+              : 'badge badge-cancelado';
+
+          const itensHTML = (pedido.itens || []).map(item => `
+            <li class="flex justify-between gap-2">
+              <span>${item.nomeProduto || 'Produto não identificado'} (${item.quantidade || 0}x)</span>
+              <span class="font-medium">${formatCurrency((item.preco || 0) * (item.quantidade || 0))}</span>
+            </li>
+          `).join('');
+
+          const pagamentosHTML = pedido.pagamentos && pedido.pagamentos.length > 0
+            ? `<ul class="space-y-1 mt-2">${pedido.pagamentos.map(pag => `
+                <li class="flex justify-between gap-2 text-sm text-gray-700">
+                  <span>${pag.tipo || 'N/A'}${pag.parcelas ? ` (${pag.parcelas}x)` : ''}</span>
+                  <span class="font-medium">${formatCurrency(pag.valor || 0)}</span>
+                </li>
+              `).join('')}</ul>`
+            : `<p class="text-sm text-gray-600 mt-2"><strong>Forma de pagamento:</strong> Não informado</p>`;
+
+          return `
+            <div class="bg-white p-6 rounded-lg shadow card border border-purple-100">
+              <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4">
+                <div>
+                  <h3 class="text-lg font-semibold">Pedido #${pedido.id}</h3>
+                  <p class="text-sm text-gray-600">${pedido.data ? new Date(pedido.data).toLocaleDateString() : 'Data não informada'}</p>
+                </div>
+                <span class="${statusBadge}">${pedido.status || 'Status não informado'}</span>
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="bg-purple-50 rounded-lg p-3">
+                  <p class="text-sm text-gray-600">Total do pedido</p>
+                  <p class="text-lg font-semibold">${formatCurrency(pedido.totalItens)}</p>
+                </div>
+                <div class="bg-green-50 rounded-lg p-3">
+                  <p class="text-sm text-gray-600">Pago</p>
+                  <p class="text-lg font-semibold text-green-700">${formatCurrency(pedido.totalPago)}</p>
+                </div>
+                <div class="bg-red-50 rounded-lg p-3">
+                  <p class="text-sm text-gray-600">Pendente</p>
+                  <p class="text-lg font-semibold text-red-700">${formatCurrency(isPendingStatus(pedido.status) ? pedido.pendente : 0)}</p>
+                </div>
+              </div>
+              ${pedido.observacao ? `<p class="mt-4 text-sm text-gray-600"><strong>Observação:</strong> ${pedido.observacao}</p>` : ''}
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                <div>
+                  <p class="text-sm font-semibold text-gray-700">Itens</p>
+                  <ul class="mt-2 space-y-1 text-sm text-gray-700">${itensHTML || '<li>Nenhum item informado.</li>'}</ul>
+                </div>
+                <div>
+                  <p class="text-sm font-semibold text-gray-700">Pagamentos</p>
+                  ${pagamentosHTML}
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        document.getElementById('pedidosContainer').innerHTML = pedidosHTML || `
+          <div class="bg-white rounded-lg shadow p-6 text-center text-gray-600">
+            Nenhum pedido encontrado com os filtros atuais.
+          </div>
+        `;
+      };
+
+      document.getElementById('filtroBusca').addEventListener('input', renderPedidos);
+      filtroStatus.addEventListener('change', renderPedidos);
+      document.getElementById('ordenacao').addEventListener('change', renderPedidos);
+
+      renderPedidos();
     }
 
     document.getElementById('btnEditar').addEventListener('click', () => {
