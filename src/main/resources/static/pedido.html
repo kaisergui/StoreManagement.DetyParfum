@@ -86,8 +86,6 @@
 				</div>
 			</div>
 
-
-
 			<div class="overflow-x-auto">
 				<table class="min-w-full table-auto bg-white rounded shadow">
 					<thead class="bg-purple-100">
@@ -115,35 +113,44 @@
 
 			<div id="modal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
 				<div
-					class="bg-white rounded-lg shadow-lg w-full max-w-2xl p-6 modal scale-95 opacity-0 overflow-y-auto max-h-[90vh]">
-					<h2 class="text-xl font-bold text-purple-700 mb-4">Cadastrar Pedido</h2>
+					class="bg-white rounded-lg shadow-lg w-full max-w-3xl p-6 modal scale-95 opacity-0 overflow-y-auto max-h-[90vh]">
+					<h2 id="modalTitle" class="text-xl font-bold text-purple-700 mb-4">Cadastrar Pedido</h2>
 					<form id="pedidoForm" class="space-y-4">
-						<div>
-							<label class="block text-sm font-medium mb-1">Cliente</label>
-							<select id="clienteId" required
-								class="w-full border border-purple-300 rounded px-3 py-2"></select>
+						<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+							<div>
+								<label class="block text-sm font-medium mb-1">Cliente</label>
+								<select id="clienteId" required
+									class="w-full border border-purple-300 rounded px-3 py-2"></select>
+							</div>
+							<div>
+								<label class="block text-sm font-medium mb-1">Status</label>
+								<select id="status" required
+									class="w-full border border-purple-300 rounded px-3 py-2 focus:ring-2 focus:ring-purple-500">
+									<option value="AGUARDANDO_PAGAMENTO">Aguardando Pagamento</option>
+									<option value="PAGO">Pago</option>
+									<option value="CANCELADO">Cancelado</option>
+								</select>
+							</div>
 						</div>
-						<div>
-							<label class="block text-sm font-medium mb-1">Status</label>
-							<select id="status" required
-								class="w-full border border-purple-300 rounded px-3 py-2 focus:ring-2 focus:ring-purple-500">
-								<option value="Aguardando Pagamento">Aguardando Pagamento</option>
-								<option value="Pago">Pago</option>
-								<option value="Cancelado">Cancelado</option>
-							</select>
+						<div class="rounded-lg border border-purple-200 bg-purple-50/40 p-3">
+							<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
+								<label class="text-sm font-medium">Itens do Pedido</label>
+								<button type="button" id="addItem" class="text-purple-600 hover:underline">+ Adicionar
+									Item</button>
+							</div>
+							<div id="itensContainer" class="space-y-3 max-h-64 overflow-y-auto pr-2"></div>
+							<p class="text-xs text-purple-600 mt-2">A busca é exibida em lista rolável para facilitar a
+								seleção sem expandir a tela.</p>
 						</div>
-						<div>
-							<label class="block text-sm font-medium mb-1">Itens do Pedido</label>
-							<datalist id="produtosList"></datalist>
-							<div id="itensContainer"></div>
-							<button type="button" id="addItem" class="mt-2 text-purple-600 hover:underline">+ Adicionar
-								Item</button>
-						</div>
-						<div>
-							<label class="block text-sm font-medium mb-1">Pagamentos</label>
-							<div id="pagamentosContainer"></div>
-							<button type="button" id="addPagamento" class="mt-2 text-purple-600 hover:underline">+
-								Adicionar Pagamento</button>
+						<div class="rounded-lg border border-purple-200 bg-purple-50/40 p-3">
+							<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
+								<label class="text-sm font-medium">Pagamentos</label>
+								<button type="button" id="addPagamento" class="text-purple-600 hover:underline">+
+									Adicionar Pagamento</button>
+							</div>
+							<div id="pagamentosContainer" class="space-y-3 max-h-48 overflow-y-auto pr-2"></div>
+							<p class="text-xs text-purple-600 mt-2">Adicione quantas parcelas forem necessárias, inclusive
+								pagamentos repetidos em dinheiro.</p>
 						</div>
 						<div>
 							<label class="block text-sm font-medium mb-1">Observação</label>
@@ -160,55 +167,7 @@
 				</div>
 			</div>
 		</main>
-		<tbody id="pedidosTable" class="divide-y"></tbody>
-		</table>
 	</div>
-
-	<!-- Modal -->
-	<div id="modal" class="fixed inset-0 bg-black/50 flex items-center justify-center hidden z-50">
-		<div
-			class="bg-white rounded-lg shadow-lg w-full max-w-2xl p-6 modal scale-95 opacity-0 overflow-y-auto max-h-[90vh]">
-			<h2 class="text-xl font-bold text-purple-700 mb-4">Cadastrar Pedido</h2>
-			<form id="pedidoForm" class="space-y-4">
-				<div>
-					<label class="block text-sm font-medium mb-1">Cliente</label>
-					<select id="clienteId" required class="w-full border border-purple-300 rounded px-3 py-2"></select>
-				</div>
-				<div>
-					<label class="block text-sm font-medium mb-1">Status</label>
-					<select id="status" required
-						class="w-full border border-purple-300 rounded px-3 py-2 focus:ring-2 focus:ring-purple-500">
-						<option value="AGUARDANDO_PAGAMENTO">Aguardando Pagamento</option>
-						<option value="PAGO">Pago</option>
-						<option value="CANCELADO">Cancelado</option>
-					</select>
-				</div>
-				<div>
-					<label class="block text-sm font-medium mb-1">Itens do Pedido</label>
-					<div id="itensContainer"></div>
-					<button type="button" id="addItem" class="mt-2 text-purple-600 hover:underline">+ Adicionar
-						Item</button>
-				</div>
-				<div>
-					<label class="block text-sm font-medium mb-1">Pagamentos</label>
-					<div id="pagamentosContainer"></div>
-					<button type="button" id="addPagamento" class="mt-2 text-purple-600 hover:underline">+ Adicionar
-						Pagamento</button>
-				</div>
-				<div>
-					<label class="block text-sm font-medium mb-1">Observação</label>
-					<textarea id="observacao" class="w-full border border-purple-300 rounded px-3 py-2"></textarea>
-				</div>
-				<div class="flex justify-end gap-2">
-					<button type="button" id="btnCloseModal"
-						class="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400">Cancelar</button>
-					<button type="submit"
-						class="px-4 py-2 rounded bg-purple-600 text-white hover:bg-purple-700">Salvar</button>
-				</div>
-			</form>
-		</div>
-	</div>
-	</main>
 
 	<script>
 		lucide.createIcons();
@@ -229,13 +188,21 @@
 		const btnAnterior = document.getElementById("btnAnterior");
 		const btnProxima = document.getElementById("btnProxima");
 		const numeroPagina = document.getElementById("numeroPagina");
+		const modalTitle = document.getElementById("modalTitle");
 
 		let pedidoEditandoId = null;
+		let pedidoDataEditando = null;
 		let clientes = [];
 		let produtos = [];
 		let pedidos = [];
 		let paginaAtual = 0;
 		const tamanhoPagina = 15;
+
+		const statusLabels = {
+			AGUARDANDO_PAGAMENTO: "Aguardando Pagamento",
+			PAGO: "Pago",
+			CANCELADO: "Cancelado"
+		};
 
 		async function carregarClientes() {
 			const res = await fetch("/clientes");
@@ -246,55 +213,79 @@
 		async function carregarProdutos() {
 			const res = await fetch("/produtos");
 			produtos = await res.json();
-			const list = document.getElementById("produtosList");
-			list.innerHTML = produtos
-				.map(p => `<option data-id="${p.id}" data-preco="${p.preco}" value="${p.nome}"></option>`)
-				.join('');
 		}
 
 		function criarItem(itemId = null, produtoSelecionado = null, quantidade = 1, preco = null) {
 			const div = document.createElement("div");
-			div.className = "flex gap-2 mb-2 items-center";
+			div.className = "grid grid-cols-[minmax(0,1fr)_90px_110px_auto] gap-2 items-start";
 			if (itemId) div.dataset.itemId = itemId;
 
 			const produto = produtos.find(p => p.id === produtoSelecionado);
 			const nomeProduto = produto ? produto.nome : "";
 
 			div.innerHTML = `
-	           <input type="text" class="produtoBusca border px-2 py-1 rounded flex-1" list="produtosList" value="${nomeProduto}" placeholder="Buscar produto..." />
-	           <input type="hidden" class="produtoId" value="${produtoSelecionado ?? ''}" />
-	           <input type="number" value="${quantidade}" placeholder="Qtd" class="quantidade border px-2 py-1 rounded w-20" />
-	           <input type="number" step="0.01" placeholder="Preço" class="preco border px-2 py-1 rounded w-24" value="${preco ?? ''}" />
-	           <button type="button" class="removeItem text-red-600"><i data-lucide="trash-2"></i></button>
-	         `;
+		      <div class="relative">
+		        <input type="text" autocomplete="off" class="produtoBusca border px-2 py-2 rounded w-full" value="${nomeProduto}" placeholder="Buscar produto..." />
+		        <input type="hidden" class="produtoId" value="${produtoSelecionado ?? ''}" />
+		        <div class="sugestoes hidden absolute left-0 right-0 top-full mt-1 rounded border border-purple-200 bg-white shadow-lg max-h-52 overflow-y-auto z-20"></div>
+		      </div>
+		      <input type="number" min="1" value="${quantidade}" placeholder="Qtd" class="quantidade border px-2 py-2 rounded w-full" />
+		      <input type="number" step="0.01" placeholder="Preço" class="preco border px-2 py-2 rounded w-full" value="${preco ?? ''}" />
+		      <button type="button" class="removeItem text-red-600 mt-1"><i data-lucide="trash-2"></i></button>
+		    `;
 
 			const buscaInput = div.querySelector(".produtoBusca");
 			const idInput = div.querySelector(".produtoId");
 			const precoInput = div.querySelector(".preco");
+			const sugestoes = div.querySelector(".sugestoes");
 
 			if (preco === null && produto) {
 				precoInput.value = produto.preco;
 			}
 
-			const atualizarProduto = () => {
-				const option = Array.from(document.getElementById("produtosList").options)
-					.find(o => o.value === buscaInput.value);
-				if (option) {
-					idInput.value = option.dataset.id;
-					precoInput.value = option.dataset.preco;
-				}
+			const selecionarProduto = (produtoSelecionado) => {
+				buscaInput.value = produtoSelecionado.nome;
+				idInput.value = produtoSelecionado.id;
+				precoInput.value = produtoSelecionado.preco;
+				sugestoes.classList.add("hidden");
 			};
 
-			buscaInput.addEventListener("input", () => {
-				const termo = buscaInput.value.toLowerCase();
-				const list = document.getElementById("produtosList");
-				list.innerHTML = produtos
-					.filter(p => p.nome.toLowerCase().includes(termo))
-					.map(p => `<option data-id="${p.id}" data-preco="${p.preco}" value="${p.nome}"></option>`)
-					.join('');
-			});
+			const renderSugestoes = (termo = "") => {
+				const termoBusca = termo.toLowerCase();
+				const filtrados = produtos.filter(p => p.nome.toLowerCase().includes(termoBusca));
+				const limite = 80;
+				const exibidos = filtrados.slice(0, limite);
+				sugestoes.innerHTML = exibidos.map(p => `
+					<div class="px-3 py-2 hover:bg-purple-100 cursor-pointer" data-produto-id="${p.id}" data-produto-preco="${p.preco}" data-produto-nome="${p.nome}">
+						<strong>${p.nome}</strong>
+						<div class="text-xs text-gray-500">R$ ${p.preco?.toFixed(2)}</div>
+					</div>
+				`).join('');
 
-			buscaInput.addEventListener("change", atualizarProduto);
+				if (filtrados.length === 0) {
+					sugestoes.innerHTML = '<div class="px-3 py-2 text-sm text-gray-500">Nenhum produto encontrado.</div>';
+				}
+
+				if (filtrados.length > limite) {
+					sugestoes.innerHTML += '<div class="px-3 py-2 text-xs text-gray-500">Refine sua busca para ver mais resultados.</div>';
+				}
+
+				sugestoes.classList.remove("hidden");
+			};
+
+			buscaInput.addEventListener("input", () => renderSugestoes(buscaInput.value));
+			buscaInput.addEventListener("focus", () => renderSugestoes(buscaInput.value));
+			buscaInput.addEventListener("blur", () => setTimeout(() => sugestoes.classList.add("hidden"), 150));
+
+			sugestoes.addEventListener("mousedown", (event) => {
+				const item = event.target.closest("[data-produto-id]");
+				if (!item) return;
+				selecionarProduto({
+					id: parseInt(item.dataset.produtoId, 10),
+					nome: item.dataset.produtoNome,
+					preco: parseFloat(item.dataset.produtoPreco)
+				});
+			});
 
 			const remover = div.querySelector(".removeItem");
 			remover.addEventListener("click", async () => {
@@ -302,7 +293,7 @@
 					const token = await getCsrfToken();
 					await fetch(`/pedidos/${pedidoForm.dataset.id}/itens/${div.dataset.itemId}`, {
 						method: "DELETE",
-						headers: {"X-XSRF-TOKEN": token},
+						headers: { "X-XSRF-TOKEN": token },
 						credentials: "same-origin"
 					});
 				}
@@ -315,33 +306,38 @@
 
 		function criarPagamento(tipo = "DINHEIRO", parcelas = "", valor = "") {
 			const div = document.createElement("div");
-			div.className = "flex gap-2 mb-2";
+			div.className = "grid grid-cols-[minmax(0,1fr)_90px_110px_auto] gap-2 items-center";
 			div.innerHTML = `
-	    <select class="tipo border px-2 py-1 rounded flex-1">
-	      <option value="DINHEIRO" ${tipo === "DINHEIRO" ? "selected" : ""}>Dinheiro</option>
-	      <option value="PIX" ${tipo === "PIX" ? "selected" : ""}>PIX</option>
-	      <option value="CARTAO" ${tipo === "CARTAO" ? "selected" : ""}>Cartão</option>
-	      <option value="PARCELADO" ${tipo === "PARCELADO" ? "selected" : ""}>Parcelado Manual</option>
-	    </select>
-	    <input type="number" placeholder="Parcelas" value="${parcelas}" class="parcelas border px-2 py-1 rounded w-24" />
-	    <input type="number" step="0.01" placeholder="Valor" value="${valor}" class="valor border px-2 py-1 rounded w-24" />
-	  `;
+		    <select class="tipo border px-2 py-2 rounded w-full">
+		      <option value="DINHEIRO" ${tipo === "DINHEIRO" ? "selected" : ""}>Dinheiro</option>
+		      <option value="PIX" ${tipo === "PIX" ? "selected" : ""}>PIX</option>
+		      <option value="CARTAO" ${tipo === "CARTAO" ? "selected" : ""}>Cartão</option>
+		      <option value="PARCELADO" ${tipo === "PARCELADO" ? "selected" : ""}>Parcelado Manual</option>
+		    </select>
+		    <input type="number" min="1" placeholder="Parcelas" value="${parcelas ?? ''}" class="parcelas border px-2 py-2 rounded w-full" />
+		    <input type="number" step="0.01" placeholder="Valor" value="${valor ?? ''}" class="valor border px-2 py-2 rounded w-full" />
+		    <button type="button" class="removePagamento text-red-600"><i data-lucide="trash-2"></i></button>
+		  `;
+			div.querySelector(".removePagamento").addEventListener("click", () => div.remove());
 			pagamentosContainer.appendChild(div);
+			lucide.createIcons();
 		}
 
 		btnOpenModal.onclick = async () => {
-		        pedidoForm.dataset.id = "";
-		        pedidoEditandoId = null;
-		        await carregarClientes();
-		        await carregarProdutos();
-		        pedidoForm.reset();
-		        itensContainer.innerHTML = "";
-		        pagamentosContainer.innerHTML = "";
-		        criarItem();
-		        criarPagamento();
-		        modal.classList.remove("hidden");
-		        setTimeout(() => modal.querySelector(".modal").classList.add("scale-100", "opacity-100"), 10);
-		      };
+			pedidoForm.dataset.id = "";
+			pedidoEditandoId = null;
+			pedidoDataEditando = null;
+			modalTitle.textContent = "Cadastrar Pedido";
+			await carregarClientes();
+			await carregarProdutos();
+			pedidoForm.reset();
+			itensContainer.innerHTML = "";
+			pagamentosContainer.innerHTML = "";
+			criarItem();
+			criarPagamento();
+			modal.classList.remove("hidden");
+			setTimeout(() => modal.querySelector(".modal").classList.add("scale-100", "opacity-100"), 10);
+		};
 
 		btnCloseModal.onclick = () => {
 			modal.querySelector(".modal").classList.remove("scale-100", "opacity-100");
@@ -354,27 +350,39 @@
 		pedidoForm.onsubmit = async (e) => {
 			e.preventDefault();
 
-			const itens = Array.from(itensContainer.children).map(row => ({
-				produtoId: parseInt(row.querySelector(".produtoId").value),
-				quantidade: parseInt(row.querySelector(".quantidade").value),
-				preco: parseFloat(row.querySelector(".preco").value)
-			}));
+			const itens = Array.from(itensContainer.children)
+				.map(row => {
+					const produtoId = parseInt(row.querySelector(".produtoId").value, 10);
+					if (!produtoId) return null;
+					return {
+						produtoId,
+						quantidade: parseInt(row.querySelector(".quantidade").value, 10) || 1,
+						preco: parseFloat(row.querySelector(".preco").value)
+					};
+				})
+				.filter(Boolean);
 
-			const pagamentos = Array.from(pagamentosContainer.children).map(row => ({
-				tipo: row.querySelector(".tipo").value,
-				parcelas: parseInt(row.querySelector(".parcelas").value),
-				valor: parseFloat(row.querySelector(".valor").value)
-			}));
-
+			const pagamentos = Array.from(pagamentosContainer.children)
+				.map(row => {
+					const valor = parseFloat(row.querySelector(".valor").value);
+					if (Number.isNaN(valor)) return null;
+					const parcelasValor = parseInt(row.querySelector(".parcelas").value, 10);
+					return {
+						tipo: row.querySelector(".tipo").value,
+						parcelas: Number.isNaN(parcelasValor) ? null : parcelasValor,
+						valor
+					};
+				})
+				.filter(Boolean);
 
 			const agora = new Date();
-			const dataFormatada = agora.toISOString().slice(0, 19); // Ex: "2025-05-29T07:30:00"
+			const dataFormatada = (pedidoDataEditando ?? agora.toISOString()).slice(0, 19);
 
 			const pedido = {
-				clienteId: parseInt(clienteId.value),
+				clienteId: parseInt(clienteId.value, 10),
 				status: status.value,
 				observacao: observacao.value,
-				data: dataFormatada, // <-- agora está presente
+				data: dataFormatada,
 				itens,
 				pagamentos
 			};
@@ -383,7 +391,7 @@
 			const url = pedidoEditandoId ? `/pedidos/${pedidoEditandoId}` : "/pedidos";
 			const method = pedidoEditandoId ? "PUT" : "POST";
 			if (!pedidoEditandoId) {
-				delete pedido.id; // remove o ID se for novo pedido
+				delete pedido.id;
 			}
 
 			const res = await fetch(url, {
@@ -414,7 +422,7 @@
 			let termo = barraBusca.value.toLowerCase();
 			let filtrados = pedidos.filter(p => {
 				const clienteNome = clientes.find(c => c.id === p.clienteId)?.nome?.toLowerCase() || '';
-				const statusPedido = p.status.toLowerCase();
+				const statusPedido = (statusLabels[p.status] || p.status).toLowerCase();
 				const dataPedido = new Date(p.data).toLocaleDateString('pt-BR');
 
 				return clienteNome.includes(termo) || statusPedido.includes(termo) || dataPedido.includes(termo);
@@ -424,19 +432,19 @@
 			const pagina = filtrados.slice(inicio, inicio + tamanhoPagina);
 
 			pedidosTable.innerHTML = pagina.map(p => `
-	    <tr>
-	      <td class="p-3">${clientes.find(c => c.id === p.clienteId)?.nome || "N/A"}</td>
-	      <td class="p-3">${new Date(p.data).toLocaleDateString()}</td>
-	      <td class="p-3">${p.status}</td>
-	      <td class="p-3">${p.itens.length} itens</td>
-	      <td class="p-3">${p.pagamentos.length} pagamentos</td>
-	      <td class="p-3">${p.observacao || '-'}</td>
-	      <td class="p-3">
-	        <button onclick="editarPedido(${p.id})" title="Editar">✏️</button>
-	        <button onclick="excluirPedido(${p.id})" title="Excluir">🗑️</button>
-	      </td>
-	    </tr>
-	  `).join('');
+		    <tr>
+		      <td class="p-3">${clientes.find(c => c.id === p.clienteId)?.nome || "N/A"}</td>
+		      <td class="p-3">${new Date(p.data).toLocaleDateString('pt-BR')}</td>
+		      <td class="p-3">${statusLabels[p.status] || p.status}</td>
+		      <td class="p-3">${p.itens.length} itens</td>
+		      <td class="p-3">${p.pagamentos.length} pagamentos</td>
+		      <td class="p-3">${p.observacao || '-'}</td>
+		      <td class="p-3">
+		        <button onclick="editarPedido(${p.id})" title="Editar">✏️</button>
+		        <button onclick="excluirPedido(${p.id})" title="Excluir">🗑️</button>
+		      </td>
+		    </tr>
+		  `).join('');
 
 			btnAnterior.disabled = paginaAtual === 0;
 			btnProxima.disabled = (paginaAtual + 1) * tamanhoPagina >= filtrados.length;
@@ -463,7 +471,7 @@
 		async function excluirPedido(id) {
 			if (!confirm("Deseja excluir este pedido?")) return;
 
-			const resToken = await fetch("/csrf-token", {credentials: "same-origin"});
+			const resToken = await fetch("/csrf-token", { credentials: "same-origin" });
 			const token = (await resToken.json()).token;
 
 			try {
@@ -487,20 +495,24 @@
 		}
 
 		async function editarPedido(id) {
+			await carregarClientes();
+			await carregarProdutos();
 			const res = await fetch(`/pedidos/${id}`);
 			const pedido = await res.json();
 
 			pedidoForm.dataset.id = pedido.id;
-			         pedidoEditandoId = pedido.id;
-			         clienteId.value = pedido.clienteId;
+			pedidoEditandoId = pedido.id;
+			pedidoDataEditando = pedido.data;
+			modalTitle.textContent = "Editar Pedido";
+			clienteId.value = pedido.clienteId;
 			status.value = pedido.status;
 			observacao.value = pedido.observacao || "";
 
 			itensContainer.innerHTML = "";
 			for (const item of pedido.itens) {
-			           criarItem(item.id, item.produtoId, item.quantidade, item.preco);
-			         }
-					 
+				criarItem(item.id, item.produtoId, item.quantidade, item.preco);
+			}
+
 			pagamentosContainer.innerHTML = "";
 			for (const pagamento of pedido.pagamentos) {
 				criarPagamento(pagamento.tipo, pagamento.parcelas, pagamento.valor);
@@ -512,7 +524,7 @@
 
 
 		async function getCsrfToken() {
-			const res = await fetch("/csrf-token", {credentials: "same-origin"});
+			const res = await fetch("/csrf-token", { credentials: "same-origin" });
 			const data = await res.json();
 			return data.token;
 		}
